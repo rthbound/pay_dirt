@@ -1,5 +1,7 @@
+require_relative "#{File.dirname(__FILE__)}/base.rb"
+
+# Here's something you can inherit from
 module PayDirt
-  # Here's something you can inherit from
   class Base
     include PayDirt::UseCase
   end

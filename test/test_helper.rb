@@ -12,3 +12,4 @@ $: << File.dirname(__FILE__) + "/../lib"
 $: << File.dirname(__FILE__)
 
 require "pay_dirt"
+require "pay_dirt/base.rb"
