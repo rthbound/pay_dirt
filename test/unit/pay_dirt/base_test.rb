@@ -5,7 +5,11 @@ describe PayDirt::Base do
     module UseCase
       class UltimateQuestion < PayDirt::Base
         def initialize(options)
-          load_options(:the_secret_to_life_the_universe_and_everything, options)
+          options = {
+            the_question: "What is the secret to life, the universe, and everything?"
+          }.merge(options)
+
+          load_options(:the_question, :the_secret_to_life_the_universe_and_everything, options)
         end
 
         def execute!
@@ -31,6 +35,10 @@ describe PayDirt::Base do
     rescue => e
       e.must_be_kind_of ArgumentError
     end
+  end
+
+  it "it won't error if defaults were supplied for an omitted option" do
+    @use_case.new(the_secret_to_life_the_universe_and_everything: :not_telling).must_respond_to :execute!
   end
 
   it "can execute successfully" do
