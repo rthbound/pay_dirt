@@ -17,7 +17,7 @@ module PayDirt
     # @api public
     def initialize(options)
       @success = options[:success]
-      @data = options[:data]
+      @data    = options[:data]
     end
 
     # @api public
