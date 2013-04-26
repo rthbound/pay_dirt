@@ -24,8 +24,7 @@ describe PayDirt::UseCase do
   end
 
   it "need not inherit from PayDirt::Base" do
-    # FIXME?
-    #(UseCase::UltimateQuestion < PayDirt::Solid::Base).must_be_false
+    (UseCase::UltimateQuestion < PayDirt::Base).must_be_false
   end
 
   it "must error when initialized without required options" do
