@@ -1,5 +1,4 @@
 require 'test_helper'
-
 require_relative "../../../lib/pay_dirt/use_case"
 
 describe PayDirt::UseCase do
@@ -47,6 +46,7 @@ describe PayDirt::UseCase do
     result = @use_case.new(dependencies).execute!
 
     result.successful?.must_equal true
+    result.must_be_kind_of PayDirt::Result
   end
 
   it "can execute unsuccessfully" do

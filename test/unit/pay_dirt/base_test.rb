@@ -51,6 +51,7 @@ describe PayDirt::Base do
     result = @use_case.new(dependencies).execute!
 
     result.successful?.must_equal true
+    result.must_be_kind_of PayDirt::Result
   end
 
   it "can execute unsuccessfully" do
