@@ -36,13 +36,6 @@ describe PayDirt::UseCase do
     @use_case = UseCase::UltimateQuestion
   end
 
-  it "need not inherit from PayDirt::Base" do
-    #lineage = UseCase::UltimateQuestion.ancestors.map(&:to_s)
-    #assert !lineage.include?("PayDirt::Base")
-
-    # NOTE this test only passes when base_test is removed.
-  end
-
   it "must not error when options with defaults are omitted" do
     @use_case.new({}).must_respond_to :execute!
   end
