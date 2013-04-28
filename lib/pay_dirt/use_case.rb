@@ -1,3 +1,4 @@
+require_relative "#{File.dirname(__FILE__)}/use_case.rb"
 module PayDirt
   module UseCase
     def self.included(base)

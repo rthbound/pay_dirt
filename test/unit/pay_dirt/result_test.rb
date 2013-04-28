@@ -1,4 +1,5 @@
 require 'test_helper'
+require_relative "../../../lib/pay_dirt/result"
 
 describe PayDirt::Result do
   it "knows whether it was successful or not" do

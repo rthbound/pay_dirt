@@ -1,4 +1,5 @@
 require 'test_helper'
+require_relative "../../../lib/pay_dirt/base"
 
 describe PayDirt::Base do
   before do
@@ -26,7 +27,8 @@ describe PayDirt::Base do
   end
 
   it "must inherit from PayDirt::Base" do
-     assert_operator @use_case, :<, PayDirt::Base
+    lineage = UseCase::UltimateQuestion.ancestors.map(&:to_s)
+    assert lineage.include?("PayDirt::Base")
   end
 
   it "must error when initialized without required options" do
