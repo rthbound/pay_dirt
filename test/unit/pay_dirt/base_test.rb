@@ -53,7 +53,7 @@ describe PayDirt::Base do
     result.successful?.must_equal true
   end
 
-  it "can execute successfully" do
+  it "can execute unsuccessfully" do
     dependencies = {
       the_secret_to_life_the_universe_and_everything: :i_dunno
     }

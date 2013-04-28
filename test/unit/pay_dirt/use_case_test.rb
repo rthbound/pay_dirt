@@ -9,6 +9,10 @@ describe PayDirt::UseCase do
         include PayDirt::UseCase
 
         def initialize(options)
+          options = {
+            the_secret_to_life_the_universe_and_everything: 42
+          }.merge(options)
+
           load_options(:the_secret_to_life_the_universe_and_everything, options)
         end
 
@@ -32,21 +36,26 @@ describe PayDirt::UseCase do
     # NOTE this test only passes when base_test is removed.
   end
 
-  it "must error when initialized without required options" do
-    begin
-      @use_case.new
-    rescue => e
-      e.must_be_kind_of ArgumentError
-    end
+  it "must not error when options with defaults are omitted" do
+    @use_case.new({}).must_respond_to :execute!
   end
 
   it "can execute successfully" do
     dependencies = {
-      the_secret_to_life_the_universe_and_everything: 42
     }
 
     result = @use_case.new(dependencies).execute!
 
     result.successful?.must_equal true
+  end
+
+  it "can execute unsuccessfully" do
+    dependencies = {
+      the_secret_to_life_the_universe_and_everything: :i_dunno
+    }
+
+    result = @use_case.new(dependencies).execute!
+
+    result.successful?.must_equal false
   end
 end
