@@ -7,7 +7,9 @@ module PayDirt
           raise "Missing required option: #{option}"
         })
 
-        options.delete(option) and return options
+        options.delete(option)
+
+        return options
       end
 
       def load_options(*option_names, options)

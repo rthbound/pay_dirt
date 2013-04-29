@@ -3,6 +3,7 @@ require_relative "../../../lib/pay_dirt/use_case"
 
 describe PayDirt::UseCase do
   before do
+
     module UseCase
       class UltimateQuestion
         include PayDirt::UseCase
@@ -71,5 +72,49 @@ describe PayDirt::UseCase do
     result = @use_case.new(dependencies).execute!
 
     result.successful?.must_equal false
+  end
+
+  it "has optional options" do
+    class SomeThing
+      include PayDirt::UseCase
+
+      def initialize(options)
+        options = {
+          required_option_with_default_value: true
+        }.merge(options)
+
+        load_options(:required_option_with_default_value, :required_option, options)
+      end
+
+      def execute!
+        if !@required_option_with_default_value
+          return PayDirt::Result.new(data: return_value, success: true)
+        else
+          return PayDirt::Result.new(data: return_value, success: false)
+        end
+      end
+
+      private
+      def return_value
+        {
+          optional_option:  @optional_option,
+          required_option1: @required_option_with_default_value,
+          required_option2: @required_option
+        }
+      end
+    end
+
+    # Cheating by not injecting all dependencies
+    result = SomeThing.new(required_option: true).execute! # Returns a PayDirt::Result
+    assert !result.successful?                             #=> false
+    result.data[:optional_option].must_be_nil              #=> nil
+    # Playing nice and injecting all required dependencies
+    result = SomeThing.new(required_option: true, required_option_with_default_value: false).execute!
+    assert result.successful?                              #=> true
+    result.data[:optional_option].must_be_nil              #=> nil
+    # Making use of an optional option
+    result = SomeThing.new(required_option: true, optional_option: true).execute!
+    assert !result.successful?                             #=> false
+    assert result.data[:optional_option]                   #=> true
   end
 end
