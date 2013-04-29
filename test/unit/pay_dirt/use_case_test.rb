@@ -17,10 +17,19 @@ describe PayDirt::UseCase do
 
         def execute!
           if @the_secret_to_life_the_universe_and_everything == 42
-            return PayDirt::Result.new(data: @the_secret_to_life_the_universe_and_everything, success: true)
+            return PayDirt::Result.new(data: return_value, success: true)
           else
             return PayDirt::Result.new(data: @the_secret_to_life_the_universe_and_everything, success: false)
           end
+        end
+
+        private
+
+        def return_value
+          {
+            secret: @the_secret_to_life_the_universe_and_everything,
+            some_random_option: @some_random_option
+          }
         end
       end
     end
@@ -37,6 +46,11 @@ describe PayDirt::UseCase do
 
   it "must not error when options with defaults are omitted" do
     @use_case.new({}).must_respond_to :execute!
+  end
+
+  it "loads options that are not required" do
+    result = @use_case.new({ some_random_option: true }).execute!
+    assert result.data[:some_random_option]
   end
 
   it "can execute successfully" do

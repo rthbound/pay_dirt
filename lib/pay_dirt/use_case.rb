@@ -6,10 +6,13 @@ module PayDirt
         instance_variable_set("@#{option}", options.fetch(option.to_sym) {
           raise "Missing required option: #{option}"
         })
+
+        options.delete(option) and return options
       end
 
       def load_options(*option_names, options)
-        option_names.each { |o| load_option(o, options) }
+        option_names.each { |o| options = load_option(o, options) }
+        options.each_key      { |o| options = load_option(o, options) }
       end
     end
   end
