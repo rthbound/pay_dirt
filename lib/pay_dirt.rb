@@ -1,3 +1,3 @@
-require_relative "#{File.dirname(__FILE__)}/pay_dirt/use_case.rb"
-require_relative "#{File.dirname(__FILE__)}/pay_dirt/result.rb"
-require_relative "#{File.dirname(__FILE__)}/pay_dirt/base.rb"
+require_relative 'pay_dirt/base'
+require_relative 'pay_dirt/result'
+require_relative 'pay_dirt/use_case'
