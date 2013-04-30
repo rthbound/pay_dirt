@@ -59,3 +59,7 @@ result = SomeThing.new(required_option: true, optional_option: true).execute!
 !result.successful?                                    #=> false
 result.data[:optional_option]                          #=> true
 ```
+
+### Other examples
+[rubeuler](https://github.com/rthbound/rubeuler)
+[protected_record](https://github.com/rthbound/protected_record)
