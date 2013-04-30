@@ -1,4 +1,3 @@
-require_relative "#{File.dirname(__FILE__)}/result.rb"
 module PayDirt
   class Result
     # The response from a use case execution
