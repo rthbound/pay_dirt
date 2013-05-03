@@ -61,5 +61,6 @@ result.data[:optional_option]                          #=> true
 ```
 
 ### Other examples
-[rubeuler](https://github.com/rthbound/rubeuler)
-[protected_record](https://github.com/rthbound/protected_record)
+1. [rubeuler](https://github.com/rthbound/rubeuler)
+2. [protected_record](https://github.com/rthbound/protected_record)
+3. [konamio](https://github.com/rthbound/konamio)
