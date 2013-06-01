@@ -32,11 +32,7 @@ describe PayDirt::Base do
   end
 
   it "must error when initialized without required options" do
-    begin
-      @use_case.new
-    rescue => e
-      e.must_be_kind_of ArgumentError
-    end
+    proc { @use_case.new }.must_raise ArgumentError
   end
 
   it "it won't error if defaults were supplied for an omitted option" do
