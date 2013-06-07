@@ -5,6 +5,8 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore bundler config
+.ruby-version
+.ruby-gemset
 /.bundle
 
 *.sw?
