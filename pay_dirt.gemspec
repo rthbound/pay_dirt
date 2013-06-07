@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency "minitest"
-  s.add_development_dependency "rake"
-  s.add_development_dependency "pry"
   s.add_development_dependency "coveralls"
+  s.add_development_dependency "rake"
 end
