@@ -12,7 +12,7 @@ There are two ways to employ the pattern:
 ### Sample PayDirt use case
 Example class:
 ```ruby
-class UseCase
+class SomeThing
   include PayDirt::UseCase
 
   def initialize(options)
