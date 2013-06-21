@@ -28,6 +28,7 @@ $ thor pay_dirt:service_object:new path/to/service_object -d fingers toes -D fin
   create  lib/service_objects/digit_check.rb
 ```
 
+Running the above generator will create the following file
 ```ruby
 require 'pay_dirt'
 
@@ -48,7 +49,6 @@ module ServiceObjects
   end
 end
 ```
-
 We can now call `ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!`
 and see a successful return object. Where you take it from there is up to you.
 
