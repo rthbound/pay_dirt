@@ -1,6 +1,5 @@
 <!doctype html>
 <html>
-  <a href="https://github.com/rthbound/pay_dirt"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -16,17 +15,22 @@
   <body>
     <div class="wrapper">
       <header>
-        <img src='https://raw.github.com/rthbound/pay_dirt/gh-pages/images/paydirt.png' />
-        <p>Reduce towering codebases to modular rubble (or more Ruby gems) with <strong>PayDirt</strong></p>
+        <h1>PayDirt</h1>
+        <p>Reduce towering codebases to modular rubble (or more Ruby gems)</p>
 
         <p class="view"><a href="https://github.com/rthbound/pay_dirt">View the Project on GitHub <small>rthbound/pay_dirt</small></a></p>
-        <br />
+
+
+        <ul>
+          <li><a href="https://github.com/rthbound/pay_dirt/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/rthbound/pay_dirt/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/rthbound/pay_dirt">View On <strong>GitHub</strong></a></li>
+        </ul>
       </header>
       <section>
         <h2>
-<a name="pay_dirt" class="anchor" href="#pay_dirt"><span class="octicon octicon-link"></span></a>pay_dirt</h2>
-
-<p><a href="http://badge.fury.io/rb/pay_dirt"><img src="https://badge.fury.io/rb/pay_dirt.png" alt="Gem Version"></a> <a href="https://travis-ci.org/rthbound/pay_dirt"><img src="https://travis-ci.org/rthbound/pay_dirt.png?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/rthbound/pay_dirt?branch=master"><img src="https://coveralls.io/repos/rthbound/pay_dirt/badge.png?branch=master" alt="Coverage Status"></a> <a href="https://codeclimate.com/github/rthbound/pay_dirt"><img src="https://codeclimate.com/github/rthbound/pay_dirt.png" alt="Code Climate"></a></p>
+<a name="pay_dirt----" class="anchor" href="#pay_dirt----"><span class="octicon octicon-link"></span></a>pay_dirt <a href="http://badge.fury.io/rb/pay_dirt"><img src="https://badge.fury.io/rb/pay_dirt.png" alt="Gem Version"></a> <a href="https://travis-ci.org/rthbound/pay_dirt"><img src="https://travis-ci.org/rthbound/pay_dirt.png?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/rthbound/pay_dirt?branch=master"><img src="https://coveralls.io/repos/rthbound/pay_dirt/badge.png?branch=master" alt="Coverage Status"></a> <a href="https://codeclimate.com/github/rthbound/pay_dirt"><img src="https://codeclimate.com/github/rthbound/pay_dirt.png" alt="Code Climate"></a>
+</h2>
 
 <h4>
 <a name="a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards" class="anchor" href="#a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards"><span class="octicon octicon-link"></span></a>A Ruby gem based on the "use case" pattern set forth in <a href="https://github.com/isotope11/opencurriculum-flashcards">opencurriculum-flashcards</a>
@@ -34,7 +38,7 @@
 
 <p>Provides the basic building blocks of a pattern capable of reducing a towering codebase to modular rubble (or more Ruby gems)</p>
 
-<p>There are two ways to employ the pattern: </p>
+<p>There are two ways to employ the pattern:</p>
 
 <ol>
 <li>use a class that inherits from <a href="https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/base_test.rb#L6-L24">PayDirt::Base</a>
@@ -42,75 +46,65 @@
 <li>use a class or module that includes <a href="https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/use_case_test.rb#L6-L26">PayDirt::UseCase</a>
 </li>
 </ol><h3>
-<a name="sample-paydirt-use-case" class="anchor" href="#sample-paydirt-use-case"><span class="octicon octicon-link"></span></a>Sample PayDirt use case</h3>
+<a name="generators" class="anchor" href="#generators"><span class="octicon octicon-link"></span></a>Generators</h3>
 
-<p>Example class:</p>
+<p>PayDirt now provides a service object generator, powered by <a href="https://github.com/erikhuda/thor">thor</a>. It takes a few options</p>
 
-<div class="highlight"><pre><span class="k">class</span> <span class="nc">UseCase</span>
-  <span class="kp">include</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:UseCase</span>
+<p><code>--dependencies</code> or <code>-d</code> : An array of required dependencies (this option is required)</p>
 
-  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-    <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="n">required_option_with_default_value</span><span class="p">:</span> <span class="kp">true</span>
-    <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+<p><code>--defaults</code> or <code>-D</code> : An optional hash of default values for dependencies</p>
 
-    <span class="n">load_options</span><span class="p">(</span><span class="ss">:required_option_with_default_value</span><span class="p">,</span> <span class="ss">:required_option</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-  <span class="k">end</span>
+<p><code>--inherit</code> or <code>-i</code> : A boolean flag, raise it for an implementation that inherits from <code>PayDirt::Base</code> (this is default behavior)</p>
 
-  <span class="k">def</span> <span class="nf">execute!</span>
-    <span class="k">if</span> <span class="o">!</span><span class="vi">@required_option_with_default_value</span>
-      <span class="k">return</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Result</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">data</span><span class="p">:</span> <span class="n">return_value</span><span class="p">,</span> <span class="ss">success</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-    <span class="k">else</span>
-      <span class="k">return</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Result</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">data</span><span class="p">:</span> <span class="n">return_value</span><span class="p">,</span> <span class="ss">success</span><span class="p">:</span> <span class="kp">false</span><span class="p">)</span>
+<p><code>--include</code> or <code>-m</code> : A boolean flag, raise it for an implementation that includes <code>PayDirt::UseCase</code></p>
+
+<p>Example:</p>
+
+<pre><code>$ thor pay_dirt:service_object:new digit_check -d fingers toes -D fingers:10 toes:10
+  create  lib/service_objects/digit_check.rb
+</code></pre>
+
+<p>Running the above generator will create the following file</p>
+
+<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'pay_dirt'</span>
+
+<span class="k">module</span> <span class="nn">ServiceObjects</span>
+  <span class="k">class</span> <span class="nc">DigitCheck</span> <span class="o">&lt;</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Base</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+      <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="ss">fingers</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="ss">toes</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+      <span class="n">load_options</span><span class="p">(</span><span class="ss">:fingers</span><span class="p">,</span> <span class="ss">:toes</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
     <span class="k">end</span>
-  <span class="k">end</span>
 
-  <span class="kp">private</span>
-  <span class="k">def</span> <span class="nf">return_value</span>
-    <span class="p">{</span>
-      <span class="n">optional_option</span><span class="p">:</span>  <span class="vi">@optional_option</span><span class="p">,</span>
-      <span class="n">required_option1</span><span class="p">:</span> <span class="vi">@required_option_with_default_value</span><span class="p">,</span>
-      <span class="n">required_option2</span><span class="p">:</span> <span class="vi">@required_option</span>
-    <span class="p">}</span>
+    <span class="k">def</span> <span class="nf">execute!</span>
+      <span class="k">return</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Result</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">success</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
+    <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
 </pre></div>
 
-<p>Example class usage:</p>
-
-<div class="highlight"><pre><span class="c1"># Cheating by not injecting all dependencies</span>
-<span class="n">result</span> <span class="o">=</span> <span class="no">SomeThing</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">required_option</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">execute!</span> <span class="c1"># Returns a PayDirt::Result</span>
-<span class="o">!</span><span class="n">result</span><span class="o">.</span><span class="n">successful?</span>                                    <span class="c1">#=&gt; false</span>
-<span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="o">[</span><span class="ss">:optional_option</span><span class="o">]</span>                          <span class="c1">#=&gt; nil</span>
-
-<span class="c1"># Playing nice and injecting all required dependencies</span>
-<span class="n">result</span> <span class="o">=</span> <span class="no">SomeThing</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">required_option</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">required_option_with_default_value</span><span class="p">:</span> <span class="kp">false</span><span class="p">)</span><span class="o">.</span><span class="n">execute!</span>
-<span class="n">result</span><span class="o">.</span><span class="n">successful?</span>                                     <span class="c1">#=&gt; true</span>
-<span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="o">[</span><span class="ss">:optional_option</span><span class="o">]</span>                          <span class="c1">#=&gt; nil</span>
-
-<span class="c1"># Making use of an optional option</span>
-<span class="n">result</span> <span class="o">=</span> <span class="no">SomeThing</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">required_option</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">optional_option</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">execute!</span>
-<span class="o">!</span><span class="n">result</span><span class="o">.</span><span class="n">successful?</span>                                    <span class="c1">#=&gt; false</span>
-<span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="o">[</span><span class="ss">:optional_option</span><span class="o">]</span>                          <span class="c1">#=&gt; true</span>
-</pre></div>
+<p>We can now call <code>ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!</code>
+and see a successful return object. Where you take it from there is up to you.</p>
 
 <h3>
 <a name="other-examples" class="anchor" href="#other-examples"><span class="octicon octicon-link"></span></a>Other examples</h3>
 
 <ol>
-<li><a href="http://ea.rthbound.com/eenie_meenie">eenie_meenie</a> - for assigning research subjects to experimental groups</li>
-<li><a href="http://ea.rthbound.com/konamio">konamio</a> - executes an arbitrary block when specified key sequence is entered </li>
-<li><a href="http://ea.rthbound.com/rubeuler">rubeuler</a> - benchmark your ProjectEuler.net solutions</li>
-<li><a href="https://github.com/rthbound/super_deduper">super_deduper</a> - see its readme...</li>
-<li><a href="https://github.com/rthbound/protected_record">protected_record</a> - protect certain columns by way of change requests. also audits permitted changes.</li>
+<li><a href="https://github.com/rthbound/rubeuler">rubeuler</a></li>
+<li><a href="https://github.com/rthbound/protected_record">protected_record</a></li>
+<li><a href="https://github.com/rthbound/konamio">konamio</a></li>
+<li><a href="https://github.com/rthbound/eenie_meenie">eenie_meenie</a></li>
 </ol>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/rthbound">rthbound</a></p>
-        <p><small>Page hosted on GitHub Pages</small></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-
+    
   </body>
 </html>
