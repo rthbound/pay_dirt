@@ -9,7 +9,7 @@ There are two ways to employ the pattern:
 1. use a class that inherits from [PayDirt::Base](https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/base_test.rb#L6-L24)
 2. use a class or module that includes [PayDirt::UseCase](https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/use_case_test.rb#L6-L26)
 
-### Generators
+### Generator
 
 PayDirt now provides a service object generator, powered by [thor](https://github.com/erikhuda/thor). It takes a few options
 
