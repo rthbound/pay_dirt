@@ -24,7 +24,7 @@ PayDirt now provides a service object generator, powered by [thor](https://githu
 Example:
 
 ```
-$ thor pay_dirt:service_object:new path/to/service_object -d fingers toes -D fingers:10 toes:10
+$ thor pay_dirt:service_object:new digit_check -d fingers toes -D fingers:10 toes:10
   create  lib/service_objects/digit_check.rb
 ```
 
