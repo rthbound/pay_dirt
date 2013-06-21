@@ -4,10 +4,24 @@
 
 Provides the basic building blocks of a pattern capable of reducing a towering codebase to modular rubble (or more Ruby gems)
 
-There are two ways to employ the pattern: 
+There are two ways to employ the pattern:
 
 1. use a class that inherits from [PayDirt::Base](https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/base_test.rb#L6-L24)
 2. use a class or module that includes [PayDirt::UseCase](https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/use_case_test.rb#L6-L26)
+
+### Generators
+
+PayDirt now provides a service object generator, powered by [thor](https://github.com/erikhuda/thor). It takes a few options
+
+`--dependencies` or `-d` : An array of required dependencies (this option is required)
+`--defaults` or `-D` : An optional hash of default values for dependencies
+`--inherit` or `-i` : A boolean flag, raise it for an implementation that inherits from `PayDirt::Base` (this is default behavior)
+`--include` or `-m` : A boolean flag, raise it for an implementation that includes `PayDirt::UseCase`
+
+`$ thor pay_dirt:service_object:new path/to/service_object --dependencies fingers toes --defaults fingers:10 toes:10`
+`$ thor pay_dirt:service_object:new path/to/service_object -d fingers toes -D fingers:10 toes:10`
+`$ thor pay_dirt:service_object:new path/to/service_object -d fingers -D fingers:10 toes:10`
+`$ thor pay_dirt:service_object:new path/to/service_object -d fingers -D fingers:10 toes:10 --include`
 
 ### Sample PayDirt use case
 Example class:
