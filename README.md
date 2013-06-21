@@ -14,66 +14,43 @@ There are two ways to employ the pattern:
 PayDirt now provides a service object generator, powered by [thor](https://github.com/erikhuda/thor). It takes a few options
 
 `--dependencies` or `-d` : An array of required dependencies (this option is required)
+
 `--defaults` or `-D` : An optional hash of default values for dependencies
+
 `--inherit` or `-i` : A boolean flag, raise it for an implementation that inherits from `PayDirt::Base` (this is default behavior)
+
 `--include` or `-m` : A boolean flag, raise it for an implementation that includes `PayDirt::UseCase`
 
-`$ thor pay_dirt:service_object:new path/to/service_object --dependencies fingers toes --defaults fingers:10 toes:10`
-`$ thor pay_dirt:service_object:new path/to/service_object -d fingers toes -D fingers:10 toes:10`
-`$ thor pay_dirt:service_object:new path/to/service_object -d fingers -D fingers:10 toes:10`
-`$ thor pay_dirt:service_object:new path/to/service_object -d fingers -D fingers:10 toes:10 --include`
+Example:
 
-### Sample PayDirt use case
-Example class:
+```
+$ thor pay_dirt:service_object:new path/to/service_object -d fingers toes -D fingers:10 toes:10
+  create  lib/service_objects/digit_check.rb
+```
+
 ```ruby
-class UseCase
-  include PayDirt::UseCase
+require 'pay_dirt'
 
-  def initialize(options)
-    options = {
-      required_option_with_default_value: true
-    }.merge(options)
+module ServiceObjects
+  class DigitCheck < PayDirt::Base
+    def initialize(options = {})
+      options = {
+        fingers: 10,
+        toes: 10,
+      }.merge(options)
 
-    load_options(:required_option_with_default_value, :required_option, options)
-  end
-
-  def execute!
-    if !@required_option_with_default_value
-      return PayDirt::Result.new(data: return_value, success: true)
-    else
-      return PayDirt::Result.new(data: return_value, success: false)
+      load_options(:fingers, :toes, options)
     end
-  end
 
-  private
-  def return_value
-    {
-      optional_option:  @optional_option,
-      required_option1: @required_option_with_default_value,
-      required_option2: @required_option
-    }
+    def execute!
+      return PayDirt::Result.new(success: true, data: nil)
+    end
   end
 end
 ```
 
-Example class usage:
-
-```ruby
-# Cheating by not injecting all dependencies
-result = SomeThing.new(required_option: true).execute! # Returns a PayDirt::Result
-!result.successful?                                    #=> false
-result.data[:optional_option]                          #=> nil
-
-# Playing nice and injecting all required dependencies
-result = SomeThing.new(required_option: true, required_option_with_default_value: false).execute!
-result.successful?                                     #=> true
-result.data[:optional_option]                          #=> nil
-
-# Making use of an optional option
-result = SomeThing.new(required_option: true, optional_option: true).execute!
-!result.successful?                                    #=> false
-result.data[:optional_option]                          #=> true
-```
+We can now call `ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!`
+and see a successful return object. Where you take it from there is up to you.
 
 ### Other examples
 1. [rubeuler](https://github.com/rthbound/rubeuler)
