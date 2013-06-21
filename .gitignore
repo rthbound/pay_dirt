@@ -9,5 +9,7 @@
 .ruby-gemset
 /.bundle
 
+lib/service_objects
+
 *.sw?
 .sw?
