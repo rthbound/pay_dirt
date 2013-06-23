@@ -15,13 +15,17 @@
   <body>
     <div class="wrapper">
       <header>
-      <header>
-        <img src='https://raw.github.com/rthbound/pay_dirt/gh-pages/images/paydirt.png' />
-        <p>Reduce towering codebases to modular rubble (or more Ruby gems) with <strong>PayDirt</strong></p>
+        <h1>PayDirt</h1>
+        <p>Reduce towering codebases to modular rubble (or more Ruby gems)</p>
 
         <p class="view"><a href="https://github.com/rthbound/pay_dirt">View the Project on GitHub <small>rthbound/pay_dirt</small></a></p>
-        <br />
-      </header>
+
+
+        <ul>
+          <li><a href="https://github.com/rthbound/pay_dirt/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/rthbound/pay_dirt/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/rthbound/pay_dirt">View On <strong>GitHub</strong></a></li>
+        </ul>
       </header>
       <section>
         <h2>
@@ -32,7 +36,7 @@
 <a name="a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards" class="anchor" href="#a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards"><span class="octicon octicon-link"></span></a>A Ruby gem based on the "use case" pattern set forth in <a href="https://github.com/isotope11/opencurriculum-flashcards">opencurriculum-flashcards</a>
 </h4>
 
-<p>Provides the basic building blocks of a pattern capable of reducing a towering codebase to modular rubble (or more Ruby gems)</p>
+<p>Reduce towering codebases to modular rubble (or more Ruby gems) with <strong>PayDirt</strong></p>
 
 <p>There are two ways to employ the pattern:</p>
 
@@ -41,20 +45,29 @@
 </li>
 <li>use a class or module that includes <a href="https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/use_case_test.rb#L6-L26">PayDirt::UseCase</a>
 </li>
-</ol><h3>
-<a name="generators" class="anchor" href="#generators"><span class="octicon octicon-link"></span></a>Generators</h3>
+</ol><h2>
+<a name="service-object-generator" class="anchor" href="#service-object-generator"><span class="octicon octicon-link"></span></a>service object generator</h2>
 
-<p>PayDirt now provides a service object generator, powered by <a href="https://github.com/erikhuda/thor">thor</a>. It takes a few options</p>
+<p>pay_dirt now provides a service object generator,
+powered by <a href="https://github.com/erikhuda/thor">thor</a>.
+It'll tell you <strong>how it's used</strong>:</p>
 
-<p><code>--dependencies</code> or <code>-d</code> : An array of required dependencies (this option is required)</p>
+<pre><code>$ thor help pay_dirt:service_object:new
+Usage:
+  thor pay_dirt:service_object:new FILE -d, --dependencies=one two three
 
-<p><code>--defaults</code> or <code>-D</code> : An optional hash of default values for dependencies</p>
+Options:
+  -d, --dependencies=one two three  # specify required dependencies
+  -D, [--defaults=key:value]        # Specify default dependencies
+  -i, [--inherit]                   # inherit from PayDirt::Base class
+                                    # Default: true
+  -m, [--include]                   # include the PayDirt::UseCase module (overrides --inherit)
 
-<p><code>--inherit</code> or <code>-i</code> : A boolean flag, raise it for an implementation that inherits from <code>PayDirt::Base</code> (this is default behavior)</p>
+create a service object
+</code></pre>
 
-<p><code>--include</code> or <code>-m</code> : A boolean flag, raise it for an implementation that includes <code>PayDirt::UseCase</code></p>
-
-<p>Example:</p>
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>example</h2>
 
 <pre><code>$ thor pay_dirt:service_object:new digit_check -d fingers toes -D fingers:10 toes:10
   create  lib/service_objects/digit_check.rb
@@ -82,18 +95,25 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>We can now call <code>ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!</code>
-and see a successful return object. Where you take it from there is up to you.</p>
-
 <h3>
-<a name="other-examples" class="anchor" href="#other-examples"><span class="octicon octicon-link"></span></a>Other examples</h3>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage:</h3>
+
+<div class="highlight"><pre><span class="nb">require</span> <span class="s2">"service_objects/digit_check"</span>  <span class="c1">#=&gt; true</span>
+<span class="ss">ServiceObjects</span><span class="p">:</span><span class="ss">:DigitCheck</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">execute!</span>
+ <span class="c1">#=&gt; #&lt;PayDirt::Result:0xa0be85c @data=nil, @success=true&gt;</span>
+</pre></div>
+
+<p>As you can see, we can now call <code>ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!</code>
+and expect a successful return object. Where you take it from there is up to you.</p>
+
+<h2>
+<a name="more-examples" class="anchor" href="#more-examples"><span class="octicon octicon-link"></span></a>more examples</h2>
 
 <ol>
-<li><a href="http://ea.rthbound.com/eenie_meenie">eenie_meenie</a> - for assigning research subjects to experimental groups</li>
-<li><a href="http://ea.rthbound.com/konamio">konamio</a> - executes an arbitrary block when specified key sequence is entered </li>
-<li><a href="http://ea.rthbound.com/rubeuler">rubeuler</a> - benchmark your ProjectEuler.net solutions</li>
-<li><a href="https://github.com/rthbound/super_deduper">super_deduper</a> - see its readme...</li>
-<li><a href="https://github.com/rthbound/protected_record">protected_record</a> - protect certain columns by way of change requests. also audits permitted changes.</li>
+<li><a href="https://github.com/rthbound/rubeuler">rubeuler</a></li>
+<li><a href="https://github.com/rthbound/protected_record">protected_record</a></li>
+<li><a href="https://github.com/rthbound/konamio">konamio</a></li>
+<li><a href="https://github.com/rthbound/eenie_meenie">eenie_meenie</a></li>
 </ol>
       </section>
       <footer>
