@@ -9,17 +9,27 @@ There are two ways to employ the pattern:
 1. use a class that inherits from [PayDirt::Base](https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/base_test.rb#L6-L24)
 2. use a class or module that includes [PayDirt::UseCase](https://github.com/rthbound/pay_dirt/blob/master/test/unit/pay_dirt/use_case_test.rb#L6-L26)
 
-### Generator
+service object generator
+------------------------
 
-PayDirt now provides a service object generator, powered by [thor](https://github.com/erikhuda/thor). It takes a few options
+PayDirt now provides a service object generator,
+powered by [thor](https://github.com/erikhuda/thor).
+It will tell you how to use it:
 
-`--dependencies` or `-d` : An array of required dependencies (this option is required)
+```
+$ thor help pay_dirt:service_object:new
+Usage:
+  thor pay_dirt:service_object:new FILE -d, --dependencies=one two three
 
-`--defaults` or `-D` : An optional hash of default values for dependencies
+Options:
+  -D, [--defaults=key:value]        # Specify default dependencies
+  -d, --dependencies=one two three  # Specify required dependencies
+  -i, [--inherit]                   # Should inherit from PayDirt::Base (default)
+                                    # Default: true
+  -m, [--include]                   # Should include the PayDirt::UseCase module
 
-`--inherit` or `-i` : A boolean flag, raise it for an implementation that inherits from `PayDirt::Base` (this is default behavior)
-
-`--include` or `-m` : A boolean flag, raise it for an implementation that includes `PayDirt::UseCase`
+create a service object
+```
 
 Example:
 
