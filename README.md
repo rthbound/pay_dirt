@@ -2,7 +2,7 @@
 
 #### A Ruby gem based on the "use case" pattern set forth in [opencurriculum-flashcards](https://github.com/isotope11/opencurriculum-flashcards)
 
-Provides the basic building blocks of a pattern capable of reducing a towering codebase to modular rubble (or more Ruby gems)
+Reduce a towering codebase to modular rubble (or more Ruby gems) with **PayDirt**
 
 There are two ways to employ the pattern:
 
@@ -11,11 +11,9 @@ There are two ways to employ the pattern:
 
 service object generator
 ------------------------
-
-PayDirt now provides a service object generator,
+pay_dirt now provides a service object generator,
 powered by [thor](https://github.com/erikhuda/thor).
-It will tell you how to use it:
-
+It'll tell you **how it's used**:
 ```
 $ thor help pay_dirt:service_object:new
 Usage:
@@ -31,8 +29,8 @@ Options:
 create a service object
 ```
 
-Example:
-
+example
+-------
 ```
 $ thor pay_dirt:service_object:new digit_check -d fingers toes -D fingers:10 toes:10
   create  lib/service_objects/digit_check.rb
@@ -59,10 +57,18 @@ module ServiceObjects
   end
 end
 ```
-We can now call `ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!`
-and see a successful return object. Where you take it from there is up to you.
 
-### Other examples
+### Usage:
+```ruby
+require "service_objects/digit_check"  #=> true
+ServiceObjects::DigitCheck.new.execute!
+ #=> #<PayDirt::Result:0xa0be85c @data=nil, @success=true>
+```
+As you can see, we can now call `ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!`
+and expect a successful return object. Where you take it from there is up to you.
+
+more examples
+-------------
 1. [rubeuler](https://github.com/rthbound/rubeuler)
 2. [protected_record](https://github.com/rthbound/protected_record)
 3. [konamio](https://github.com/rthbound/konamio)
