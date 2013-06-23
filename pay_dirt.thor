@@ -6,8 +6,7 @@ module PayDirt
     method_option :dependencies,
       type: :array,
       aliases: "-d",
-      desc: "specify required dependencies",
-      required: true
+      desc: "specify required dependencies"
     method_option :defaults,
       type: :hash,
       aliases: "-D",
@@ -27,7 +26,7 @@ module PayDirt
       rets = ""
       class_names = file.split("/").map { |str| str.split("_").map{ |s| (s[0].upcase + s[1..-1]) }.join("") }
       defaults     = options[:defaults] || []
-      dependencies = options[:dependencies]
+      dependencies = options[:dependencies] || []
 
       # Favor 2 spaces
       append = Proc.new { |depth, string, rets| rets << ("  " * depth) + string }
@@ -63,7 +62,11 @@ module PayDirt
           rets = append.call(inner_depth.next, "}.merge(options)\n\n", rets)
         end
 
-        rets = append.call(inner_depth.next, "load_options(:#{dependencies.join(', :')}, options)\n", rets)
+        rets = append.call(inner_depth.next, "load_options(", rets)
+        dependencies.each do |dep|
+          rets = append.call(0, ":#{dep}, ", rets)
+        end
+        rets = append.call(0, "options)\n", rets)
         rets = append.call(inner_depth, "end\n\n", rets)
 
         # The execute! method
