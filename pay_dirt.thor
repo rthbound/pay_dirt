@@ -3,30 +3,26 @@ module PayDirt
     include Thor::Actions
 
     desc "new FILE", "create a service object"
+    method_option :dependencies,
+      type: :array,
+      aliases: "-d",
+      desc: "specify required dependencies",
+      required: true
     method_option :defaults,
       type: :hash,
       aliases: "-D",
       desc: "Specify default dependencies"
-
-    method_option :dependencies,
-      type: :array,
-      aliases: "-d",
-      desc: "Specify required dependencies",
-      required: true
-
     method_option :inherit,
       type:         :boolean,
-      desc:         "Should inherit from PayDirt::Base (default)",
+      desc:         "inherit from PayDirt::Base class",
       aliases:      "-i",
       default:      true,
       lazy_default: true
-
     method_option :include,
       type:         :boolean,
-      desc:         "Should include the PayDirt::UseCase module",
+      desc:         "include the PayDirt::UseCase module (overrides --inherit)",
       aliases:      "-m",
       lazy_default: true
-
     def new(file)
       rets = ""
       class_names = file.split("/").map { |str| str.split("_").map{ |s| (s[0].upcase + s[1..-1]) }.join("") }

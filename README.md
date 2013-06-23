@@ -20,11 +20,11 @@ Usage:
   thor pay_dirt:service_object:new FILE -d, --dependencies=one two three
 
 Options:
+  -d, --dependencies=one two three  # specify required dependencies
   -D, [--defaults=key:value]        # Specify default dependencies
-  -d, --dependencies=one two three  # Specify required dependencies
-  -i, [--inherit]                   # Should inherit from PayDirt::Base (default)
+  -i, [--inherit]                   # inherit from PayDirt::Base class
                                     # Default: true
-  -m, [--include]                   # Should include the PayDirt::UseCase module
+  -m, [--include]                   # include the PayDirt::UseCase module (overrides --inherit)
 
 create a service object
 ```
