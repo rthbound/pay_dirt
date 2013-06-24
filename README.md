@@ -32,7 +32,7 @@ Usage:
 
 Options:
   -d, --dependencies=one two three  # specify required dependencies
-  -D, [--defaults=key:value]        # Specify default dependencies
+  -D, [--defaults=key:value]        # specify default dependencies
   -i, [--inherit]                   # inherit from PayDirt::Base class
                                     # Default: true
   -m, [--include]                   # include the PayDirt::UseCase module (overrides --inherit)
