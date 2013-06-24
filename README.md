@@ -13,7 +13,18 @@ service object generator
 ------------------------
 pay_dirt now provides a service object generator,
 powered by [thor](https://github.com/erikhuda/thor).
-It'll tell you **how it's used**:
+In order to use them in your rails app, you'll need to install the task. Here's how:
+
+```
+$ thor install http://goo.gl/XI7Xw
+...
+Do you wish to continue [y/N]? y
+Please specify a name for https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor in the system repository [pay_dirt.thor]: pay_dirt
+Storing thor file in your system repository
+$
+```
+
+After installing, you can use the generator in *anywhere* on your system. It'll tell you **how it's used**:
 ```
 $ thor help pay_dirt:service_object:new
 Usage:
