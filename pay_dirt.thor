@@ -10,7 +10,7 @@ module PayDirt
     method_option :defaults,
       type: :hash,
       aliases: "-D",
-      desc: "specify default dependencies"
+      desc: "Specify default dependencies"
     method_option :inherit,
       type:         :boolean,
       desc:         "inherit from PayDirt::Base class",
@@ -34,36 +34,38 @@ module PayDirt
         append.call(0, "require 'pay_dirt'\n\nmodule ServiceObjects\n")
         class_names[0..-2].each_with_index { |mod,i| append.call(i.next, "module #{mod}\n") }
 
-        class_depth = class_names.length
+        class_name, class_depth = class_names.last, class_names.length
 
         if options[:include]
-          append.call(class_depth, "class #{class_names.last}\n")
+          append.call(class_depth, "class #{class_name}\n")
           append.call(class_depth.next, "include PayDirt::UseCase\n")
         elsif options[:inherit]
-          append.call(class_depth, "class #{class_names.last} < PayDirt::Base\n")
+          append.call(class_depth, "class #{class_name} < PayDirt::Base\n")
         end
 
+        inner_depth = class_depth.next
+
         # The initialize method
-        append.call(class_depth + 1, "def initialize(options = {})\n")
+        append.call(inner_depth, "def initialize(options = {})\n")
 
         # Configure dependencies' default values
         if options[:defaults]
-          append.call(class_depth + 2, "options = {\n")
+          append.call(inner_depth.next, "options = {\n")
 
-          options[:defaults].each { |k,v| append.call(class_depth + 3, "#{k}: #{v}" + ",\n") }
+          options[:defaults].each { |k,v| append.call(inner_depth + 2, "#{k}: #{v}" + ",\n") }
 
-          append.call(class_depth + 2, "}.merge(options)\n\n")
+          append.call(inner_depth.next, "}.merge(options)\n\n")
         end
 
-        append.call(class_depth + 2, "load_options(")
+        append.call(inner_depth.next, "load_options(")
         options[:dependencies].each { |dep| append.call(0, ":#{dep}, ") }
         append.call(0, "options)\n")
-        append.call(class_depth + 1, "end\n\n")
+        append.call(inner_depth, "end\n\n")
 
         # The execute! method
-        append.call(class_depth + 1, "def execute!\n")
-        append.call(class_depth + 2, "return PayDirt::Result.new(success: true, data: nil)\n")
-        append.call(class_depth + 1, "end\n")
+        append.call(inner_depth, "def execute!\n")
+        append.call(inner_depth.next, "return PayDirt::Result.new(success: true, data: nil)\n")
+        append.call(inner_depth, "end\n")
 
         append.call(class_depth, "end\n") # Closes innermost class definition
 
