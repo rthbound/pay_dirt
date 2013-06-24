@@ -46,7 +46,7 @@
 powered by <a href="https://github.com/erikhuda/thor">thor</a>.
 In order to use them in your rails app, you'll need to install the task. Here's how:</p>
 
-<pre><code>$ thor install http://goo.gl/XI7Xw
+<pre><code>$ thor install https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor 
 ...
 Do you wish to continue [y/N]? y
 Please specify a name for https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor in the system repository [pay_dirt.thor]: pay_dirt
@@ -54,7 +54,7 @@ Storing thor file in your system repository
 $
 </code></pre>
 
-<p>After installing, you can use the generator <em>anywhere</em> on your system. It'll tell you <strong>how it's used</strong>:</p>
+<p>After installing, you can use the generator <em>anywhere</em> you can use thor. It'll tell you <strong>how it's used</strong>:</p>
 
 <pre><code>$ thor help pay_dirt:service_object:new
 Usage:
@@ -62,7 +62,7 @@ Usage:
 
 Options:
   -d, --dependencies=one two three  # specify required dependencies
-  -D, [--defaults=key:value]        # Specify default dependencies
+  -D, [--defaults=key:value]        # specify default dependencies
   -i, [--inherit]                   # inherit from PayDirt::Base class
                                     # Default: true
   -m, [--include]                   # include the PayDirt::UseCase module (overrides --inherit)
