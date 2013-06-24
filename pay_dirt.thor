@@ -33,9 +33,7 @@ module PayDirt
 
       create_file "lib/service_objects/#{file}.rb" do
         append.call(0, "require 'pay_dirt'\n\nmodule ServiceObjects\n")
-        class_names[0..-2].each_with_index do |mod,i|
-          append.call(i.next, "module #{mod}\n")
-        end
+        class_names[0..-2].each_with_index { |mod,i| append.call(i.next, "module #{mod}\n") }
 
         class_name, class_depth = class_names.last, class_names.length
 
@@ -55,17 +53,13 @@ module PayDirt
         if options[:defaults]
           append.call(inner_depth.next, "options = {\n")
 
-          defaults.each do |k,v|
-            append.call(inner_depth + 2, "#{k}: #{v}" + ",\n")
-          end
+          defaults.each { |k,v| append.call(inner_depth + 2, "#{k}: #{v}" + ",\n") }
 
           append.call(inner_depth.next, "}.merge(options)\n\n")
         end
 
         append.call(inner_depth.next, "load_options(")
-        dependencies.each do |dep|
-          append.call(0, ":#{dep}, ")
-        end
+        dependencies.each { |dep| append.call(0, ":#{dep}, ") }
         append.call(0, "options)\n")
         append.call(inner_depth, "end\n\n")
 
@@ -76,9 +70,7 @@ module PayDirt
 
         append.call(class_depth, "end\n") # Closes innermost class definition
 
-        class_names[0..-1].each_with_index do |mod,i|
-          append.call(class_depth - (i + 1), "end\n")
-        end
+        class_names[0..-1].each_with_index { |m,i| append.call(class_depth - (i + 1), "end\n") }
 
         @rets
       end
