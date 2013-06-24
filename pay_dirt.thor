@@ -23,53 +23,52 @@ module PayDirt
       aliases:      "-m",
       lazy_default: true
     def new(file)
-      @rets = ""
-      class_names = file.split("/").map { |str| str.split("_").map{ |s| (s[0].upcase + s[1..-1]) }.join("") }
-      options[:dependencies] ||= []
+      class_names = file.split("/").map { |str| str.split("_").map(&:capitalize).join("") }
+      dependencies = options[:dependencies] || []
 
       # Favor 2 spaces
-      append = Proc.new { |depth, string| (@rets ||= "") << ("  " * depth) + string }
+      append = Proc.new { |string,depth=0| (@rets ||= "") << ("  " * depth) + string }
 
-      create_file "lib/service_objects/#{file}.rb" do
-        append.call(0, "require 'pay_dirt'\n\nmodule ServiceObjects\n")
-        class_names[0..-2].each_with_index { |mod,i| append.call(i.next, "module #{mod}\n") }
+      create_file "lib/service_objects/#{file.chomp("\.rb")}.rb" do
+        append.call("require 'pay_dirt'\n\nmodule ServiceObjects\n")
+        class_names[0..-2].each_with_index { |mod,i| append.call("module #{mod}\n", i.next) }
 
         class_name, class_depth = class_names.last, class_names.length
 
         if options[:include]
-          append.call(class_depth, "class #{class_name}\n")
-          append.call(class_depth.next, "include PayDirt::UseCase\n")
+          append.call("class #{class_name}\n", class_depth)
+          append.call("include PayDirt::UseCase\n", class_depth.next)
         elsif options[:inherit]
-          append.call(class_depth, "class #{class_name} < PayDirt::Base\n")
+          append.call("class #{class_name} < PayDirt::Base\n", class_depth)
         end
 
         inner_depth = class_depth.next
 
         # The initialize method
-        append.call(inner_depth, "def initialize(options = {})\n")
+        append.call("def initialize(options = {})\n", inner_depth)
 
         # Configure dependencies' default values
         if options[:defaults]
-          append.call(inner_depth.next, "options = {\n")
+          append.call("options = {\n", inner_depth.next)
 
-          options[:defaults].each { |k,v| append.call(inner_depth + 2, "#{k}: #{v}" + ",\n") }
+          options[:defaults].each { |k,v| append.call("#{k}: #{v}" + ",\n", inner_depth + 2) }
 
-          append.call(inner_depth.next, "}.merge(options)\n\n")
+          append.call("}.merge(options)\n\n", inner_depth.next)
         end
 
-        append.call(inner_depth.next, "load_options(")
-        options[:dependencies].each { |dep| append.call(0, ":#{dep}, ") }
-        append.call(0, "options)\n")
-        append.call(inner_depth, "end\n\n")
+        append.call("load_options(", inner_depth.next)
+        dependencies.each { |dep| append.call(":#{dep}, ") }
+        append.call("options)\n")
+        append.call("end\n\n", inner_depth)
 
         # The execute! method
-        append.call(inner_depth, "def execute!\n")
-        append.call(inner_depth.next, "return PayDirt::Result.new(success: true, data: nil)\n")
-        append.call(inner_depth, "end\n")
+        append.call("def execute!\n", inner_depth)
+        append.call("return PayDirt::Result.new(success: true, data: nil)\n", inner_depth.next)
+        append.call("end\n", inner_depth)
 
-        append.call(class_depth, "end\n") # Closes innermost class definition
+        append.call("end\n", class_depth) # Closes innermost class definition
 
-        class_names[0..-1].each_with_index { |m,i| append.call(class_depth - (i + 1), "end\n") }
+        class_names[0..-1].each_with_index { |m,i| append.call("end\n", class_depth - (i + 1)) }
 
         @rets
       end
