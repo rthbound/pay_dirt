@@ -24,7 +24,7 @@ Storing thor file in your system repository
 $
 ```
 
-After installing, you can use the generator *anywhere* on your system. It'll tell you **how it's used**:
+After installing, you can use your new generator *anywhere* you can use thor. It'll tell you **how it's used**:
 ```
 $ thor help pay_dirt:service_object:new
 Usage:
