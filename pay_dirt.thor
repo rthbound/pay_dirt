@@ -26,8 +26,25 @@ module PayDirt
       class_names = file.split("/").map { |str| str.split("_").map(&:capitalize).join("") }
       dependencies = options[:dependencies] || []
 
-      # Favor 2 spaces
+      # Favor 2 spaces, default to 0 depth
       append = Proc.new { |string,depth=0| (@rets ||= "") << ("  " * depth) + string }
+
+      # The execute! method
+      execute_method = Proc.new { |base_depth|
+        append.call("def execute!\n", base_depth)
+        append.call("return PayDirt::Result.new(success: true, data: nil)\n", base_depth.next)
+        append.call("end\n", base_depth)
+      }
+
+      load_options_method = Proc.new { |base_depth, deps|
+        append.call("load_options(", base_depth)
+        deps.each { |dep| append.call(":#{dep}, ") }
+        append.call("options)\n")
+      }
+
+      ending = Proc.new { |n_newlines, base_depth|
+        append.call("end" + ("\n" * n_newlines), base_depth)
+      }
 
       create_file "lib/service_objects/#{file.chomp("\.rb")}.rb" do
         append.call("require 'pay_dirt'\n\nmodule ServiceObjects\n")
@@ -56,19 +73,12 @@ module PayDirt
           append.call("}.merge(options)\n\n", inner_depth.next)
         end
 
-        append.call("load_options(", inner_depth.next)
-        dependencies.each { |dep| append.call(":#{dep}, ") }
-        append.call("options)\n")
-        append.call("end\n\n", inner_depth)
+        load_options_method.call(inner_depth.next, dependencies)
+        ending.call(2, inner_depth)
+        execute_method.call(inner_depth)
+        ending.call(1, class_depth)
 
-        # The execute! method
-        append.call("def execute!\n", inner_depth)
-        append.call("return PayDirt::Result.new(success: true, data: nil)\n", inner_depth.next)
-        append.call("end\n", inner_depth)
-
-        append.call("end\n", class_depth) # Closes innermost class definition
-
-        class_names[0..-1].each_with_index { |m,i| append.call("end\n", class_depth - (i + 1)) }
+        class_names[0..-1].each_with_index { |m,i| ending.call(1, class_depth - (i + 1)) }
 
         @rets
       end
