@@ -16,7 +16,7 @@ powered by [thor](https://github.com/erikhuda/thor).
 In order to use them in your rails app, you'll need to install the task. Here's how:
 
 ```
-$ thor install http://goo.gl/XI7Xw
+$ thor install https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor
 ...
 Do you wish to continue [y/N]? y
 Please specify a name for https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor in the system repository [pay_dirt.thor]: pay_dirt
