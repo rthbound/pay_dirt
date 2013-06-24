@@ -25,7 +25,7 @@ module PayDirt
     def new(file)
       @rets = ""
       class_names = file.split("/").map { |str| str.split("_").map{ |s| (s[0].upcase + s[1..-1]) }.join("") }
-      options[:dependencies] ||= []
+      dependencies = options[:dependencies] || []
 
       # Favor 2 spaces
       append = Proc.new { |depth, string| (@rets ||= "") << ("  " * depth) + string }
@@ -58,7 +58,7 @@ module PayDirt
         end
 
         append.call(inner_depth.next, "load_options(")
-        options[:dependencies].each { |dep| append.call(0, ":#{dep}, ") }
+        dependencies.each { |dep| append.call(0, ":#{dep}, ") }
         append.call(0, "options)\n")
         append.call(inner_depth, "end\n\n")
 
