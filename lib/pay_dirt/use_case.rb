@@ -3,7 +3,7 @@ module PayDirt
     def self.included(base)
       # @overload load_options(keys, options)
       #   Sets instance variables for all provided key value pairs in +options+.
-      #   Raises error if required keys cannot be fond in options.
+      #   Raises error if required keys cannot be found in options.
       #   @param [List<String,Symbol>] keys a List of (Strings or Symbols) that must be contained in +options+
       #   @param [Hash] options hash of options (dependencies)
       # @overload load_options(options)
@@ -19,9 +19,6 @@ module PayDirt
       end
 
       private
-      # @param [Symbol,String] option The option to load from the provided options hash.
-      # @param [Hash] options The provided hash of options
-      # @return [Hash] Deletes the key value pair at `option` and returns the remaining options hash
       # @api private
       def load_option(option, options)
         instance_variable_set("@#{option}", fetch(option, options))
@@ -30,8 +27,6 @@ module PayDirt
         return options
       end
 
-      # @param [Symbol, String] opt the key to fetch from +opts+
-      # @param [Hash] opts the hash of options from which +opt+ will be fetched
       # @api private
       def fetch(opt, opts)
         opts.fetch(opt.to_sym) { raise "Missing required option: #{opt}" }
