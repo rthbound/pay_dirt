@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
                       (or more Ruby gems)
                     }
   s.summary     = %q{
-                      Based on a pattern introduced to me
-                      by knewter.
+                      Reduce a towering codebase to modular
+                      rubble (or more rubygems) with pay_dirt
                     }
 
   s.files         = `git ls-files`.split("\n")
