@@ -14,18 +14,18 @@ module PayDirt
     #   PayDirt::Result.new(success: true, data: {})
     #   # => <PayDirt::Result>
     #
-    # @api public
+    # @public
     def initialize(options)
       @success = options[:success]
       @data    = options[:data]
     end
 
-    # @api public
+    # @public
     def successful?
       !!@success
     end
 
-    # @api public
+    # @public
     def data
       @data
     end

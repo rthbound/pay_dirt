@@ -7,17 +7,18 @@ Gem::Specification.new do |s|
   s.version     = PayDirt::VERSION
   s.authors     = ["Tad Hosford"]
   s.email       = ["tad.hosford@gmail.com"]
-  s.homepage    = "http://github.com/rthbound/pay_dirt"
-  s.description = %q{
-                      Provides the basic building blocks
-                      of a pattern capable of reducing a
-                      towering codebase to modular rubble
-                      (or more Ruby gems)
-                    }
-  s.summary     = %q{
-                      Reduce a towering codebase to modular
-                      rubble (or more rubygems) with pay_dirt
-                    }
+  s.homepage    = "http://ea.rthbound.com/pay_dirt"
+
+  s.description = <<-description
+    Provides the basic building blocks
+    of a pattern capable of reducing a
+    towering codebase to modular rubble
+    (or more Ruby gems)
+  description
+  s.summary     = <<-summary
+    Reduce a towering codebase to modular
+    rubble (or more rubygems) with pay_dirt
+  summary
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
