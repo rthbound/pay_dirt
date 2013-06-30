@@ -10,15 +10,12 @@ describe PayDirt::Base do
             the_question: "What is the secret to life, the universe, and everything?"
           }.merge(options)
 
-          load_options(:the_question, :the_secret_to_life_the_universe_and_everything, options)
+          load_options(:the_question, :the_secret, options)
         end
 
         def execute!
-          if @the_secret_to_life_the_universe_and_everything == 42
-            return PayDirt::Result.new(data: @the_secret_to_life_the_universe_and_everything, success: true)
-          else
-            return PayDirt::Result.new(data: @the_secret_to_life_the_universe_and_everything, success: false)
-          end
+          @the_secret == 42 and return result(true, @the_secret )
+          return result(false)
         end
       end
     end
@@ -31,17 +28,17 @@ describe PayDirt::Base do
     assert lineage.include?("PayDirt::Base")
   end
 
-  it "must error when initialized without required options" do
+  it "will error when initialized without required options" do
     proc { @use_case.new }.must_raise ArgumentError
   end
 
-  it "it won't error if defaults were supplied for an omitted option" do
-    @use_case.new(the_secret_to_life_the_universe_and_everything: :not_telling).must_respond_to :execute!
+  it "won't error if defaults were supplied for an omitted option" do
+    @use_case.new(the_secret: :not_telling).must_respond_to :execute!
   end
 
   it "can execute successfully" do
     dependencies = {
-      the_secret_to_life_the_universe_and_everything: 42
+      the_secret: 42
     }
 
     result = @use_case.new(dependencies).execute!
@@ -52,7 +49,7 @@ describe PayDirt::Base do
 
   it "can execute unsuccessfully" do
     dependencies = {
-      the_secret_to_life_the_universe_and_everything: :i_dunno
+      the_secret: :i_dunno
     }
 
     result = @use_case.new(dependencies).execute!

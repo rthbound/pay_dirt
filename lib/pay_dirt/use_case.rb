@@ -1,3 +1,4 @@
+require_relative "result"
 module PayDirt
   module UseCase
     def self.included(base)
@@ -18,6 +19,19 @@ module PayDirt
 
         # Load remaining options
         options.each_key  { |o| options = load_option(o, options) }
+      end
+
+      # Returns a result object representing success.
+      #
+      # @param [List<String,Symbol>]
+      #   success should the result be +#successful?+
+      #
+      # @param [Object]
+      #   data (nil) optional, an object containing information
+      #
+      # @public
+      def result(success, data = nil)
+        PayDirt::Result.new(success: success, data: data)
       end
 
       private
