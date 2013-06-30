@@ -65,7 +65,7 @@ module ServiceObjects
     end
 
     def execute!
-      return PayDirt::Result.new(success: true, data: nil)
+      result(true)
     end
   end
 end
