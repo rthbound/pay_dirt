@@ -68,7 +68,7 @@ module PayDirt
     def write_execute_method
       # The execute! method
       @append.call(@inner_depth, "def execute!\n")
-      @append.call(@inner_depth.next, "return PayDirt::Result.new(success: true, data: nil)\n")
+      @append.call(@inner_depth.next, "return result(true)\n")
       @append.call(@inner_depth, "end\n")
     end
 
