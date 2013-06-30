@@ -1,4 +1,3 @@
-require_relative "result"
 module PayDirt
   module UseCase
     def self.included(base)
