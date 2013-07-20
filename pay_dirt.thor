@@ -157,7 +157,7 @@ module PayDirt
     end
 
     def assert_returns_a_successful_result
-      assert_this("#execute! returns a successful result", [
+      assert_this("executes successfully", [
         "result = @subject.new(@params).execute!",
         "result.successful?.must_equal true",
         "result.must_be_kind_of PayDirt::Result"
@@ -165,7 +165,7 @@ module PayDirt
     end
 
     def context_class
-      @append.call(1, "describe \"the class\" do\n")
+      @append.call(1, "describe \"as a class\" do\n")
       assert_wont_error_with_all_dependencies
       @append.call(0, "\n")
       assert_error_without_dependencies
@@ -173,7 +173,7 @@ module PayDirt
     end
 
     def context_instance
-      @append.call(1, "describe \"the class\" do\n")
+      @append.call(1, "describe \"as an instance\" do\n")
       assert_returns_a_successful_result
       @append.call(1, "end\n")
     end

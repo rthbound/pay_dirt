@@ -44,11 +44,13 @@ create a service object
 example
 -------
 ```
-$ thor pay_dirt:service_object:new digit_check -d fingers toes -D fingers:10 toes:10
-  create  lib/service_objects/digit_check.rb
+$ thor pay_dirt:service_object:new digit_check -d fingers toes nose -D fingers:10 toes:10
+      create  lib/service_objects/digit_check.rb
+      create  test/unit/service_objects/digit_check_test.rb
+      append  test/minitest_helper.rb
 ```
 
-Running the above generator will create the following file
+Running the above generator will create the following object
 
 ```ruby
 require 'pay_dirt'
@@ -61,11 +63,45 @@ module ServiceObjects
         toes: 10,
       }.merge(options)
 
-      load_options(:fingers, :toes, options)
+      load_options(:fingers, :toes, :nose, options)
     end
 
     def execute!
-      result(true)
+      return result(true)
+    end
+  end
+end
+```
+
+and the following unit test
+```ruby
+require 'minitest_helper'
+
+describe ServiceObjects::DigitCheck do
+  before do
+    @subject = ServiceObjects::DigitCheck
+    @params = {
+      fingers: MiniTest::Mock.new,
+      toes: MiniTest::Mock.new,
+      nose: MiniTest::Mock.new,
+    }
+  end
+
+  describe "as a class" do
+    it "initializes properly" do
+      @subject.new(@params).must_respond_to :execute!
+    end
+
+    it "errors when initialized without required dependencies" do
+      -> { @subject.new(@params.reject { |k| k.to_s == 'nose' }) }.must_raise RuntimeError
+    end
+  end
+
+  describe "as an instance" do
+    it "executes successfully" do
+      result = @subject.new(@params).execute!
+      result.successful?.must_equal true
+      result.must_be_kind_of PayDirt::Result
     end
   end
 end
