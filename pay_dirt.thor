@@ -30,27 +30,16 @@ module PayDirt
       class_names = file.split("/").map { |str| str.split("_").map{ |s| (s[0].upcase + s[1..-1]) }.join("") }
       @dependencies = options[:dependencies] || []
 
-      # Favor 2 spaces
-      @append = Proc.new { |depth, string| (@rets ||= "") << ("  " * depth) + string }
-
-      # Call for the class string
-      @class_string = Proc.new do |names|
-        "ServiceObjects::#{ names.map(&:to_s).join("::") }"
-      end
-
       create_service_object(file, class_names)
-
-      @rets = nil
-
       create_tests(file, class_names)
     end
 
     private
     desc "close_class CLASS_NAMES", "hide", hide: true
     def close_class(class_names)
-      @append.call(@class_depth, "end\n") # Closes innermost class definition
+      append(@class_depth, "end\n") # Closes innermost class definition
 
-      class_names[0..-1].each_with_index { |m,i| @append.call(@class_depth - (i + 1), "end\n") }
+      class_names[0..-1].each_with_index { |m,i| append(@class_depth - (i + 1), "end\n") }
     end
 
     desc "open_class CLASS_NAMES", "hide", hide: true
@@ -59,89 +48,89 @@ module PayDirt
       @class_depth = class_names.length
       @inner_depth = class_names.length + 1
 
-      @append.call(0, "require 'pay_dirt'\n\nmodule ServiceObjects\n")
-      class_names[0..-2].each_with_index { |mod,i| @append.call(i.next, "module #{mod}\n") }
+      append(0, "require 'pay_dirt'\n\nmodule ServiceObjects\n")
+      class_names[0..-2].each_with_index { |mod,i| append(i.next, "module #{mod}\n") }
 
       if options[:include]
-        @append.call(@class_depth, "class #{@class_name}\n")
-        @append.call(@class_depth.next, "include PayDirt::UseCase\n")
+        append(@class_depth, "class #{@class_name}\n")
+        append(@class_depth.next, "include PayDirt::UseCase\n")
       elsif options[:inherit]
-        @append.call(@class_depth, "class #{@class_name} < PayDirt::Base\n")
+        append(@class_depth, "class #{@class_name} < PayDirt::Base\n")
       end
     end
 
     def write_execute_method
       # The execute! method
-      @append.call(@inner_depth, "def execute!\n")
-      @append.call(@inner_depth.next, "return result(true)\n")
-      @append.call(@inner_depth, "end\n")
+      append(@inner_depth, "def execute!\n")
+      append(@inner_depth.next, "return result(true)\n")
+      append(@inner_depth, "end\n")
     end
 
     def write_initialize_method
-      @append.call(@inner_depth, "def initialize(options = {})\n")
+      append(@inner_depth, "def initialize(options = {})\n")
 
       set_defaults if options[:defaults]
       call_load_options
 
-      @append.call(@inner_depth, "end\n\n")
+      append(@inner_depth, "end\n\n")
     end
 
     def call_load_options
-      @append.call(@inner_depth.next, "load_options(")
-      @dependencies.each { |dep| @append.call(0, ":#{dep}, ") }
-      @append.call(0, "options)\n")
+      append(@inner_depth.next, "load_options(")
+      @dependencies.each { |dep| append(0, ":#{dep}, ") }
+      append(0, "options)\n")
     end
 
     def set_defaults
-      @append.call(@inner_depth.next, "options = {\n")
+      append(@inner_depth.next, "options = {\n")
 
-      options[:defaults].each { |k,v| @append.call(@inner_depth + 2, "#{k}: #{v}" + ",\n") }
+      options[:defaults].each { |k,v| append(@inner_depth + 2, "#{k}: #{v}" + ",\n") }
 
-      @append.call(@inner_depth.next, "}.merge(options)\n\n")
+      append(@inner_depth.next, "}.merge(options)\n\n")
     end
 
     # TESTS!
     def open_test_class(class_names, file)
       case options[:test_framework]
       when "minitest", "mini_test"
-        @append.call(0, "require 'minitest_helper'\n\n")
+        append(0, "require 'minitest_helper'\n\n")
         append_to_file "test/minitest_helper.rb" do
           "require 'service_objects/#{file}'\n"
         end
       else
-        @append.call(0, "require 'test_helper'\n\n")
+        append(0, "require 'test_helper'\n\n")
         append_to_file "test/test_helper.rb" do
           "require 'service_objects/#{file}'\n"
         end
       end
-      @append.call(0, "describe #{ @class_string.call(class_names) } do\n")
+      append(0, "describe #{ class_string(class_names) } do\n")
     end
 
     def mock_test_dependencies
-      @append.call(2, "@params = {\n")
+      append(2, "@params = {\n")
 
       @dependencies.each do |dep|
-        @append.call(3, "#{dep}: MiniTest::Mock.new,\n")
+        append(3, "#{dep}: MiniTest::Mock.new,\n")
       end
 
-      @append.call(2, "}\n")
+      append(2, "}\n")
     end
 
     def add_before_hook(class_names)
-      @append.call(1, "before do\n")
-      @append.call(2, "@subject = #{ @class_string.call(class_names) }\n")
+      append(1, "before do\n")
+      append(2, "@subject = #{ class_string(class_names) }\n")
       mock_test_dependencies
-      @append.call(1, "end\n")
+      append(1, "end\n")
     end
 
     def assert_this(assertion, asserts)
-      @append.call(2, "it \"#{assertion}\" do\n")
+      append(2, "it \"#{assertion}\" do\n")
 
       asserts.each do |s|
-        @append.call(3, "#{s}\n")
+        append(3, "#{s}\n")
       end
 
-      @append.call(2, "end\n")
+      append(2, "end\n")
     end
 
     def assert_error_without_dependencies
@@ -165,24 +154,25 @@ module PayDirt
     end
 
     def context_class
-      @append.call(1, "describe \"as a class\" do\n")
+      append(1, "describe \"as a class\" do\n")
       assert_wont_error_with_all_dependencies
-      @append.call(0, "\n")
+      append(0, "\n")
       assert_error_without_dependencies
-      @append.call(1, "end\n")
+      append(1, "end\n")
     end
 
     def context_instance
-      @append.call(1, "describe \"as an instance\" do\n")
+      append(1, "describe \"as an instance\" do\n")
       assert_returns_a_successful_result
-      @append.call(1, "end\n")
+      append(1, "end\n")
     end
 
     def close_test_class
-      @append.call(0, "end")
+      append(0, "end")
     end
 
     def create_service_object(file, class_names)
+      @rets = nil
       create_file "lib/service_objects/#{file}.rb" do
         open_class(class_names)
         write_initialize_method
@@ -195,16 +185,25 @@ module PayDirt
     end
 
     def create_tests(file, class_names)
+      @rets = nil
       create_file "test/unit/service_objects/#{file}_test.rb" do
         open_test_class(class_names, file)
         add_before_hook(class_names)
-        @append.call(0, "\n")
+        append(0, "\n")
         context_class
-        @append.call(0, "\n")
+        append(0, "\n")
         context_instance
         close_test_class
         @rets
       end
+    end
+
+    def append(depth, string)
+      (@rets ||= "") << ("  " * depth) + string
+    end
+
+    def class_string(names)
+      "ServiceObjects::#{ names.map(&:to_s).join("::") }"
     end
   end
 end
