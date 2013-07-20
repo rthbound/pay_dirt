@@ -38,28 +38,11 @@ module PayDirt
         "ServiceObjects::#{ names.map(&:to_s).join("::") }"
       end
 
-      create_file "lib/service_objects/#{file}.rb" do
-        open_class(class_names)
-        write_initialize_method
-        write_execute_method
-
-        close_class(class_names)
-
-        @rets
-      end
+      create_service_object(file, class_names)
 
       @rets = nil
 
-      create_file "test/unit/service_objects/#{file}_test.rb" do
-        open_test_class(class_names, file)
-        add_before_hook(class_names)
-        @append.call(0, "\n")
-        context_class
-        @append.call(0, "\n")
-        context_instance
-        close_test_class
-        @rets
-      end
+      create_tests(file, class_names)
     end
 
     private
@@ -197,6 +180,31 @@ module PayDirt
 
     def close_test_class
       @append.call(0, "end")
+    end
+
+    def create_service_object(file, class_names)
+      create_file "lib/service_objects/#{file}.rb" do
+        open_class(class_names)
+        write_initialize_method
+        write_execute_method
+
+        close_class(class_names)
+
+        @rets
+      end
+    end
+
+    def create_tests(file, class_names)
+      create_file "test/unit/service_objects/#{file}_test.rb" do
+        open_test_class(class_names, file)
+        add_before_hook(class_names)
+        @append.call(0, "\n")
+        context_class
+        @append.call(0, "\n")
+        context_instance
+        close_test_class
+        @rets
+      end
     end
   end
 end
