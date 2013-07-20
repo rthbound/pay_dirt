@@ -108,12 +108,13 @@ end
 ```
 
 ### Usage:
+The class generated can be used in the following manner:
 ```ruby
 require "service_objects/digit_check"  #=> true
-ServiceObjects::DigitCheck.new.execute!
+ServiceObjects::DigitCheck.new(nose: true).execute!
  #=> #<PayDirt::Result:0xa0be85c @data=nil, @success=true>
 ```
-As you can see, we can now call `ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!`
+As you can see, we can now call `ServiceObjects::DigitCheck.new(nose: true).execute!`
 and expect a successful return object. Where you take it from there is up to you.
 
 more examples
@@ -122,3 +123,5 @@ more examples
 2. [protected_record](https://github.com/rthbound/protected_record)
 3. [konamio](https://github.com/rthbound/konamio)
 4. [eenie_meenie](https://github.com/rthbound/eenie_meenie)
+5. [foaas](https://github.com/rthbound/foaas)
+6. [konami-fo](https://github.com/rthbound/konami-fo)
