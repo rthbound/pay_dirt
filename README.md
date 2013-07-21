@@ -1,8 +1,32 @@
 ## pay_dirt [![Gem Version](https://badge.fury.io/rb/pay_dirt.png)](http://badge.fury.io/rb/pay_dirt) [![Build Status](https://travis-ci.org/rthbound/pay_dirt.png?branch=master)](https://travis-ci.org/rthbound/pay_dirt) [![Coverage Status](https://coveralls.io/repos/rthbound/pay_dirt/badge.png?branch=master)](https://coveralls.io/r/rthbound/pay_dirt?branch=master) [![Code Climate](https://codeclimate.com/github/rthbound/pay_dirt.png)](https://codeclimate.com/github/rthbound/pay_dirt)
 
-#### A Ruby gem based on the "use case" pattern set forth in [opencurriculum-flashcards](https://github.com/isotope11/opencurriculum-flashcards)
-
 Provides the basic building blocks of a pattern capable of reducing a towering codebase to modular rubble (or more Ruby gems)
+
+### What is PayDirt
+
+PayDirt gets its name from an 18th century gold mining idiom. One was said to have "struck pay dirt" when his pick axe revealed a vein of ore.
+I hit pay dirt when I discovered this pattern. It provides me the freedom to build quickly with the confidence of knowing that testing will be a breeze.
+
+### What is the use case?
+
+Its use case is gem making. It's for getting rid of callbacks and for shipping business logic off to the more suitable (and more portable) location.
+It's for packaging use cases up in a modular fashion, where each unit expects to be provided certain dependencies and can execute to provide an expected result.
+It makes sure you're using dependency injection so you can painlessly mock all your dependencies.
+
+The basic idea:
+
+1. Initialize an object by supplying ALL dependencies as a single options hash.
+2. The object should have ONE public method, `#execute!`, which will return an expected result object.
+
+What pay_dirt does to help:
+
+1. It will set instance variables from the hash of dependencies, using top level key-value pairs.
+2. It will not initialize (it WILL error) without all required dependencies.
+3. It allows you to set default values for any dependencies (just merge the `options` argument into your defaults hash before calling `#load_options`)
+
+PayDirt also provides a `PayDirt::Result` object for your service objects to return (it will respond to `#successful?` and `#data`, see some examples)
+
+### Getting on to it
 
 There are two ways to employ the pattern:
 
@@ -125,3 +149,5 @@ more examples
 4. [eenie_meenie](https://github.com/rthbound/eenie_meenie)
 5. [foaas](https://github.com/rthbound/foaas)
 6. [konami-fo](https://github.com/rthbound/konami-fo)
+
+#### PayDirt is a Ruby gem based on the "use case" pattern set forth in [opencurriculum-flashcards](https://github.com/isotope11/opencurriculum-flashcards)
