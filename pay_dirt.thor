@@ -60,8 +60,8 @@ module PayDirt
     end
 
     def write_execute_method
-      # The execute! method
-      append(@inner_depth, "def execute!\n")
+      # The call method
+      append(@inner_depth, "def call\n")
       append(@inner_depth.next, "return result(true)\n")
       append(@inner_depth, "end\n")
     end
@@ -142,12 +142,12 @@ module PayDirt
     end
 
     def assert_wont_error_with_all_dependencies
-      assert_this("initializes properly", ["@subject.new(@params).must_respond_to :execute!"])
+      assert_this("initializes properly", ["@subject.new(@params).must_respond_to :call"])
     end
 
     def assert_returns_a_successful_result
       assert_this("executes successfully", [
-        "result = @subject.new(@params).execute!",
+        "result = @subject.new(@params).call",
         "result.successful?.must_equal true",
         "result.must_be_kind_of PayDirt::Result"
       ])

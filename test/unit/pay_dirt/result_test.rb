@@ -19,7 +19,7 @@ describe PayDirt::Result do
           load_options(:success, :data, options)
         end
 
-        def execute!
+        def call
           result(@success, @data)
         end
       end
@@ -28,15 +28,15 @@ describe PayDirt::Result do
     end
 
     it "can succeed" do
-      @pay_dirt.new(success: true, data: "yum").execute!.successful?.must_equal true
+      @pay_dirt.new(success: true, data: "yum").call.successful?.must_equal true
     end
 
     it "can be unsuccessful" do
-      @pay_dirt.new(success: false, data: "gross").execute!.successful?.must_equal false
+      @pay_dirt.new(success: false, data: "gross").call.successful?.must_equal false
     end
 
     it "provides access to data" do
-      @pay_dirt.new(success: true, data: "yum").execute!.data.must_equal "yum"
+      @pay_dirt.new(success: true, data: "yum").call.data.must_equal "yum"
     end
   end
 end

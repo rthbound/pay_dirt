@@ -13,7 +13,7 @@ describe PayDirt::Base do
           load_options(:the_question, :the_secret, options)
         end
 
-        def execute!
+        def call
           @the_secret == 42 and return result(true, @the_secret )
           return result(false)
         end
@@ -33,7 +33,7 @@ describe PayDirt::Base do
   end
 
   it "won't error if defaults were supplied for an omitted option" do
-    @use_case.new(the_secret: :not_telling).must_respond_to :execute!
+    @use_case.new(the_secret: :not_telling).must_respond_to :call
   end
 
   it "can execute successfully" do
@@ -41,7 +41,7 @@ describe PayDirt::Base do
       the_secret: 42
     }
 
-    result = @use_case.new(dependencies).execute!
+    result = @use_case.new(dependencies).call
 
     result.successful?.must_equal true
     result.must_be_kind_of PayDirt::Result
@@ -52,7 +52,7 @@ describe PayDirt::Base do
       the_secret: :i_dunno
     }
 
-    result = @use_case.new(dependencies).execute!
+    result = @use_case.new(dependencies).call
 
     result.successful?.must_equal false
   end

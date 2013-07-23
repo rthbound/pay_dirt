@@ -16,7 +16,7 @@ It makes sure you're using dependency injection so you can painlessly mock all y
 The basic idea:
 
 1. Initialize an object by supplying ALL dependencies as a single options hash.
-2. The object should have ONE public method, `#execute!`, which will return an expected result object.
+2. The object should have ONE public method, `#call`, which will return an expected result object.
 
 What pay_dirt does to help:
 
@@ -90,7 +90,7 @@ module ServiceObjects
       load_options(:fingers, :toes, :nose, options)
     end
 
-    def execute!
+    def call
       return result(true)
     end
   end
@@ -113,7 +113,7 @@ describe ServiceObjects::DigitCheck do
 
   describe "as a class" do
     it "initializes properly" do
-      @subject.new(@params).must_respond_to :execute!
+      @subject.new(@params).must_respond_to :call
     end
 
     it "errors when initialized without required dependencies" do
@@ -123,7 +123,7 @@ describe ServiceObjects::DigitCheck do
 
   describe "as an instance" do
     it "executes successfully" do
-      result = @subject.new(@params).execute!
+      result = @subject.new(@params).call
       result.successful?.must_equal true
       result.must_be_kind_of PayDirt::Result
     end
@@ -135,10 +135,10 @@ end
 The class generated can be used in the following manner:
 ```ruby
 require "service_objects/digit_check"  #=> true
-ServiceObjects::DigitCheck.new(nose: true).execute!
+ServiceObjects::DigitCheck.new(nose: true).call
  #=> #<PayDirt::Result:0xa0be85c @data=nil, @success=true>
 ```
-As you can see, we can now call `ServiceObjects::DigitCheck.new(nose: true).execute!`
+As you can see, we can now call `ServiceObjects::DigitCheck.new(nose: true).call`
 and expect a successful return object. Where you take it from there is up to you.
 
 more examples
