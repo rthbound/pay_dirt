@@ -77,11 +77,11 @@ describe PayDirt::UseCase do
 
       describe "being called unsuccessfully" do
         it "will fail if :fingers is anything but 10" do
-          @subject.new(@params.merge(fingers: rand(1..9))).call.successful?.must_equal false
+          @subject.new(@params.merge(fingers: rand(9))).call.successful?.must_equal false
         end
 
         it "will fail if :toes is anything but 10" do
-          @subject.new(@params.merge(toes: rand(1..9))).call.successful?.must_equal false
+          @subject.new(@params.merge(toes: rand(9))).call.successful?.must_equal false
         end
 
         it "will fail if :nose is false" do
