@@ -24,7 +24,7 @@ What pay_dirt does to help:
 2. It will not initialize (it WILL error) without all required dependencies.
 3. It allows you to set default values for any dependencies (just merge the `options` argument into your defaults hash before calling `#load_options`)
 
-PayDirt also provides a `PayDirt::Result` object for your service objects to return (it will respond to `#successful?` and `#data`, see some examples)
+PayDirt also provides a `PayDirt::Result` object for your service objects to return (it will respond to `#successful?` and `#data`, see some examples). This is entirely optional, as this object can return whatever you like.
 
 ### Getting on to it
 
@@ -68,9 +68,9 @@ create a service object
 example
 -------
 ```
-$ thor pay_dirt:service_object:new digit_check -d fingers toes nose -D fingers:10 toes:10
-      create  lib/service_objects/digit_check.rb
-      create  test/unit/service_objects/digit_check_test.rb
+$ thor pay_dirt:service_object:new quick/digit_check -d fingers toes nose -D fingers:10 toes:10
+      create  lib/quick/digit_check.rb
+      create  test/unit/quick/digit_check_test.rb
       append  test/minitest_helper.rb
 ```
 
@@ -79,7 +79,7 @@ Running the above generator will create the following object
 ```ruby
 require 'pay_dirt'
 
-module ServiceObjects
+module Quick
   class DigitCheck < PayDirt::Base
     def initialize(options = {})
       options = {
@@ -101,9 +101,9 @@ and the following unit test
 ```ruby
 require 'minitest_helper'
 
-describe ServiceObjects::DigitCheck do
+describe Quick::DigitCheck do
   before do
-    @subject = ServiceObjects::DigitCheck
+    @subject = Quick::DigitCheck
     @params = {
       fingers: MiniTest::Mock.new,
       toes: MiniTest::Mock.new,
@@ -134,11 +134,11 @@ end
 ### Usage:
 The class generated can be used in the following manner:
 ```ruby
-require "service_objects/digit_check"  #=> true
-ServiceObjects::DigitCheck.new(nose: true).call
+require "quick/digit_check"  #=> true
+Quick::DigitCheck.new(nose: true).call
  #=> #<PayDirt::Result:0xa0be85c @data=nil, @success=true>
 ```
-As you can see, we can now call `ServiceObjects::DigitCheck.new(nose: true).call`
+As you can see, we can now call `Quick::DigitCheck.new(nose: true).call`
 and expect a successful return object. Where you take it from there is up to you.
 
 more examples

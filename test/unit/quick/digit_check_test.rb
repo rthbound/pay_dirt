@@ -1,11 +1,12 @@
 require 'test_helper'
-require_relative '../../lib/service_objects/digit_check'
 
-describe ServiceObjects::DigitCheck do
+describe Quick::DigitCheck do
   before do
-    @subject = ServiceObjects::DigitCheck
+    @subject = Quick::DigitCheck
     @params = {
-      nose: MiniTest::Mock.new
+      fingers: MiniTest::Mock.new,
+      toes: MiniTest::Mock.new,
+      nose: MiniTest::Mock.new,
     }
   end
 

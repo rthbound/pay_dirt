@@ -2,7 +2,7 @@ module PayDirt
   class ServiceObject < Thor
     include Thor::Actions
 
-    desc "new FILE", "create a service object... with tests :)"
+    desc "new FILE", "create a fully tested object (optionally, requires dependencies)"
     method_option :dependencies,
       type: :array,
       aliases: "-d",
@@ -30,30 +30,28 @@ module PayDirt
       class_names = file.split("/").map { |str| str.split("_").map{ |s| (s[0].upcase + s[1..-1]) }.join("") }
       @dependencies = options[:dependencies] || []
 
-      create_service_object(file, class_names)
+      create_object(file, class_names)
       create_tests(file, class_names)
     end
 
     private
-    desc "close_class CLASS_NAMES", "hide", hide: true
     def close_class(class_names)
       append(@class_depth, "end\n") # Closes innermost class definition
 
-      class_names[0..-1].each_with_index { |m,i| append(@class_depth - (i + 1), "end\n") }
+      @class_depth.times { |i| append(@class_depth - (i + 1), "end\n") }
     end
 
-    desc "open_class CLASS_NAMES", "hide", hide: true
     def open_class(class_names)
       @class_name  = class_names.last
-      @class_depth = class_names.length
-      @inner_depth = class_names.length + 1
+      @class_depth = class_names.length - 1
+      @inner_depth = class_names.length
 
-      append(0, "require 'pay_dirt'\n\nmodule ServiceObjects\n")
-      class_names[0..-2].each_with_index { |mod,i| append(i.next, "module #{mod}\n") }
+      append(0, "require 'pay_dirt'\n\n")
+      class_names[0..-2].each_with_index { |mod,i| append(i, "module #{mod}\n") }
 
       if options[:include]
         append(@class_depth, "class #{@class_name}\n")
-        append(@class_depth.next, "include PayDirt::UseCase\n")
+        append(@inner_depth, "include PayDirt::UseCase\n")
       elsif options[:inherit]
         append(@class_depth, "class #{@class_name} < PayDirt::Base\n")
       end
@@ -76,6 +74,8 @@ module PayDirt
     end
 
     def call_load_options
+      append(@inner_depth.next, "# sets instance variables from key value pairs,\n")
+      append(@inner_depth.next, "# will fail if any keys given before options aren't in options\n")
       append(@inner_depth.next, "load_options(")
       @dependencies.each { |dep| append(0, ":#{dep}, ") }
       append(0, "options)\n")
@@ -95,12 +95,12 @@ module PayDirt
       when "minitest", "mini_test"
         append(0, "require 'minitest_helper'\n\n")
         append_to_file "test/minitest_helper.rb" do
-          "require 'service_objects/#{file}'\n"
+          "require \"#{file}\"\n"
         end
       else
         append(0, "require 'test_helper'\n\n")
         append_to_file "test/test_helper.rb" do
-          "require 'service_objects/#{file}'\n"
+          "require \"#{file}\"\n"
         end
       end
       append(0, "describe #{ class_string(class_names) } do\n")
@@ -171,9 +171,9 @@ module PayDirt
       append(0, "end")
     end
 
-    def create_service_object(file, class_names)
+    def create_object(file, class_names)
       @rets = nil
-      create_file "lib/service_objects/#{file}.rb" do
+      create_file "lib/#{file}.rb" do
         open_class(class_names)
         write_initialize_method
         write_execute_method
@@ -186,7 +186,7 @@ module PayDirt
 
     def create_tests(file, class_names)
       @rets = nil
-      create_file "test/unit/service_objects/#{file}_test.rb" do
+      create_file "test/unit/#{file}_test.rb" do
         open_test_class(class_names, file)
         add_before_hook(class_names)
         append(0, "\n")
@@ -203,7 +203,7 @@ module PayDirt
     end
 
     def class_string(names)
-      "ServiceObjects::#{ names.map(&:to_s).join("::") }"
+      names.map(&:to_s).join("::")
     end
   end
 end
