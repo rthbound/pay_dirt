@@ -32,11 +32,36 @@
 <a name="pay_dirt----" class="anchor" href="#pay_dirt----"><span class="octicon octicon-link"></span></a>pay_dirt <a href="http://badge.fury.io/rb/pay_dirt"><img src="https://badge.fury.io/rb/pay_dirt.png" alt="Gem Version"></a> <a href="https://travis-ci.org/rthbound/pay_dirt"><img src="https://travis-ci.org/rthbound/pay_dirt.png?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/rthbound/pay_dirt?branch=master"><img src="https://coveralls.io/repos/rthbound/pay_dirt/badge.png?branch=master" alt="Coverage Status"></a> <a href="https://codeclimate.com/github/rthbound/pay_dirt"><img src="https://codeclimate.com/github/rthbound/pay_dirt.png" alt="Code Climate"></a>
 </h2>
 
-<h4>
-<a name="a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards" class="anchor" href="#a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards"><span class="octicon octicon-link"></span></a>A Ruby gem based on the "use case" pattern set forth in <a href="https://github.com/isotope11/opencurriculum-flashcards">opencurriculum-flashcards</a>
-</h4>
-
 <p>Provides the basic building blocks of a pattern capable of reducing a towering codebase to modular rubble (or more Ruby gems)</p>
+
+<h3>
+<a name="what-is-paydirt" class="anchor" href="#what-is-paydirt"><span class="octicon octicon-link"></span></a>What is PayDirt</h3>
+
+<p>PayDirt gets its name from an 18th century gold mining idiom. One was said to have "struck pay dirt" when his pick axe revealed a vein of ore.
+I hit pay dirt when I discovered this pattern. It provides me the freedom to build quickly with the confidence of knowing that testing will be a breeze.</p>
+
+<h3>
+<a name="what-is-the-use-case" class="anchor" href="#what-is-the-use-case"><span class="octicon octicon-link"></span></a>What is the use case?</h3>
+
+<p>Its use case is gem making. It's for getting rid of callbacks and for shipping business logic off to the more suitable (and more portable) location.
+It's for packaging use cases up in a modular fashion, where each unit expects to be provided certain dependencies and can be called to provide an expected result.
+It makes sure you're using dependency injection so you can painlessly mock all your dependencies.</p>
+
+<p>The basic idea:</p>
+
+<ol>
+<li>Initialize an object by supplying ALL dependencies as a single options hash.</li>
+<li>The object should have ONE public method, <code>#call</code>, which will return an expected result object.</li>
+</ol><p>What pay_dirt does to help:</p>
+
+<ol>
+<li>It will set instance variables from the hash of dependencies, using top level key-value pairs.</li>
+<li>It will not initialize (it WILL error) without all required dependencies.</li>
+<li>It allows you to set default values for any dependencies (just merge the <code>options</code> argument into your defaults hash before calling <code>#load_options</code>)</li>
+</ol><p>PayDirt also provides a <code>PayDirt::Result</code> object for your service objects to return (it will respond to <code>#successful?</code> and <code>#data</code>, see some examples). This is entirely optional, as this object can return whatever you like.</p>
+
+<h3>
+<a name="getting-on-to-it" class="anchor" href="#getting-on-to-it"><span class="octicon octicon-link"></span></a>Getting on to it</h3>
 
 <p>There are two ways to employ the pattern:</p>
 
@@ -52,7 +77,7 @@
 powered by <a href="https://github.com/erikhuda/thor">thor</a>.
 In order to use them in your rails app, you'll need to install the task. Here's how:</p>
 
-<pre><code>$ thor install http://goo.gl/XI7Xw
+<pre><code>$ thor install https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor
 ...
 Do you wish to continue [y/N]? y
 Please specify a name for https://raw.github.com/rthbound/pay_dirt/master/pay_dirt.thor in the system repository [pay_dirt.thor]: pay_dirt
@@ -60,7 +85,7 @@ Storing thor file in your system repository
 $
 </code></pre>
 
-<p>After installing, you can use the generator <em>anywhere</em> on your system. It'll tell you <strong>how it's used</strong>:</p>
+<p>After installing, you can use your new generator <em>anywhere</em> you can use thor. It'll tell you <strong>how it's used</strong>:</p>
 
 <pre><code>$ thor help pay_dirt:service_object:new
 Usage:
@@ -68,7 +93,7 @@ Usage:
 
 Options:
   -d, --dependencies=one two three  # specify required dependencies
-  -D, [--defaults=key:value]        # Specify default dependencies
+  -D, [--defaults=key:value]        # specify default dependencies
   -i, [--inherit]                   # inherit from PayDirt::Base class
                                     # Default: true
   -m, [--include]                   # include the PayDirt::UseCase module (overrides --inherit)
@@ -79,15 +104,17 @@ create a service object
 <h2>
 <a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>example</h2>
 
-<pre><code>$ thor pay_dirt:service_object:new digit_check -d fingers toes -D fingers:10 toes:10
-  create  lib/service_objects/digit_check.rb
+<pre><code>$ thor pay_dirt:service_object:new quick/digit_check -d fingers toes nose -D fingers:10 toes:10
+      create  lib/quick/digit_check.rb
+      create  test/unit/quick/digit_check_test.rb
+      append  test/minitest_helper.rb
 </code></pre>
 
-<p>Running the above generator will create the following file</p>
+<p>Running the above generator will create the following object</p>
 
 <div class="highlight highlight-ruby"><pre><span class="nb">require</span> <span class="s1">'pay_dirt'</span>
 
-<span class="k">module</span> <span class="nn">ServiceObjects</span>
+<span class="k">module</span> <span class="nn">Quick</span>
   <span class="k">class</span> <span class="nc">DigitCheck</span> <span class="o">&lt;</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Base</span>
     <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
       <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
@@ -95,11 +122,45 @@ create a service object
         <span class="ss">toes</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
       <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
 
-      <span class="n">load_options</span><span class="p">(</span><span class="ss">:fingers</span><span class="p">,</span> <span class="ss">:toes</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+      <span class="n">load_options</span><span class="p">(</span><span class="ss">:fingers</span><span class="p">,</span> <span class="ss">:toes</span><span class="p">,</span> <span class="ss">:nose</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
     <span class="k">end</span>
 
-    <span class="k">def</span> <span class="nf">execute!</span>
-      <span class="k">return</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Result</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">success</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">call</span>
+      <span class="k">return</span> <span class="n">result</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>and the following unit test</p>
+
+<div class="highlight highlight-ruby"><pre><span class="nb">require</span> <span class="s1">'minitest_helper'</span>
+
+<span class="n">describe</span> <span class="ss">Quick</span><span class="p">:</span><span class="ss">:DigitCheck</span> <span class="k">do</span>
+  <span class="n">before</span> <span class="k">do</span>
+    <span class="vi">@subject</span> <span class="o">=</span> <span class="ss">Quick</span><span class="p">:</span><span class="ss">:DigitCheck</span>
+    <span class="vi">@params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">fingers</span><span class="p">:</span> <span class="ss">MiniTest</span><span class="p">:</span><span class="ss">:Mock</span><span class="o">.</span><span class="n">new</span><span class="p">,</span>
+      <span class="ss">toes</span><span class="p">:</span> <span class="ss">MiniTest</span><span class="p">:</span><span class="ss">:Mock</span><span class="o">.</span><span class="n">new</span><span class="p">,</span>
+      <span class="ss">nose</span><span class="p">:</span> <span class="ss">MiniTest</span><span class="p">:</span><span class="ss">:Mock</span><span class="o">.</span><span class="n">new</span><span class="p">,</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="n">describe</span> <span class="s2">"as a class"</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s2">"initializes properly"</span> <span class="k">do</span>
+      <span class="vi">@subject</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@params</span><span class="p">)</span><span class="o">.</span><span class="n">must_respond_to</span> <span class="ss">:call</span>
+    <span class="k">end</span>
+
+    <span class="n">it</span> <span class="s2">"errors when initialized without required dependencies"</span> <span class="k">do</span>
+      <span class="o">-&gt;</span> <span class="p">{</span> <span class="vi">@subject</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@params</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="o">|</span> <span class="n">k</span><span class="o">.</span><span class="n">to_s</span> <span class="o">==</span> <span class="s1">'nose'</span> <span class="p">})</span> <span class="p">}</span><span class="o">.</span><span class="n">must_raise</span> <span class="no">RuntimeError</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">describe</span> <span class="s2">"as an instance"</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s2">"executes successfully"</span> <span class="k">do</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="vi">@subject</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@params</span><span class="p">)</span><span class="o">.</span><span class="n">call</span>
+      <span class="n">result</span><span class="o">.</span><span class="n">successful?</span><span class="o">.</span><span class="n">must_equal</span> <span class="kp">true</span>
+      <span class="n">result</span><span class="o">.</span><span class="n">must_be_kind_of</span> <span class="ss">PayDirt</span><span class="p">:</span><span class="ss">:Result</span>
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
@@ -108,12 +169,14 @@ create a service object
 <h3>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage:</h3>
 
-<div class="highlight highlight-ruby"><pre><span class="nb">require</span> <span class="s2">"service_objects/digit_check"</span>  <span class="c1">#=&gt; true</span>
-<span class="ss">ServiceObjects</span><span class="p">:</span><span class="ss">:DigitCheck</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">execute!</span>
+<p>The class generated can be used in the following manner:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="nb">require</span> <span class="s2">"quick/digit_check"</span>  <span class="c1">#=&gt; true</span>
+<span class="ss">Quick</span><span class="p">:</span><span class="ss">:DigitCheck</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">nose</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">call</span>
  <span class="c1">#=&gt; #&lt;PayDirt::Result:0xa0be85c @data=nil, @success=true&gt;</span>
 </pre></div>
 
-<p>As you can see, we can now call <code>ServiceObjects::DigitCheck.new(fingers: 10, toes: 10).execute!</code>
+<p>As you can see, we can now call <code>Quick::DigitCheck.new(nose: true).call</code>
 and expect a successful return object. Where you take it from there is up to you.</p>
 
 <h2>
@@ -124,7 +187,12 @@ and expect a successful return object. Where you take it from there is up to you
 <li><a href="https://github.com/rthbound/protected_record">protected_record</a></li>
 <li><a href="https://github.com/rthbound/konamio">konamio</a></li>
 <li><a href="https://github.com/rthbound/eenie_meenie">eenie_meenie</a></li>
-</ol>
+<li><a href="https://github.com/rthbound/foaas">foaas</a></li>
+<li><a href="https://github.com/rthbound/konami-fo">konami-fo</a></li>
+<li><a href="https://github.com/rthbound/rungs">rungs</a></li>
+</ol><h4>
+<a name="paydirt-is-a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards" class="anchor" href="#paydirt-is-a-ruby-gem-based-on-the-use-case-pattern-set-forth-in-opencurriculum-flashcards"><span class="octicon octicon-link"></span></a>PayDirt is a Ruby gem based on the "use case" pattern set forth in <a href="https://github.com/isotope11/opencurriculum-flashcards">opencurriculum-flashcards</a>
+</h4>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/rthbound">rthbound</a></p>
