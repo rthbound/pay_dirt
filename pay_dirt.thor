@@ -9,7 +9,6 @@ module PayDirt
       desc:    "specify required dependencies"
     method_option :test_framework,
       type: :string,
-      default: "minitest",
       desc:    "choose a testing framework"
     method_option :defaults,
       type: :hash,
