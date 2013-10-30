@@ -110,7 +110,7 @@ module PayDirt
         boiler_plate_test_classes("test_helper", file)
       end
 
-      append(0, "describe #{ class_string(class_names) } do\n")
+      append(0, "describe #{ class_string(class_names) }zoMG do\n")
     end
 
     def mock_test_dependencies
