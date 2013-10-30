@@ -9,7 +9,8 @@
 .ruby-gemset
 /.bundle
 
-lib/service_objects
+lib/quick
+test/unit/quick
 
 *.sw?
 .sw?
