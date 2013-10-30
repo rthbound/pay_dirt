@@ -89,19 +89,27 @@ module PayDirt
     end
 
     # TESTS!
+    def boiler_plate_test_classes(helper_name, file)
+      append(0, "require '#{helper_name}'\n\n")
+
+      File.file? "test/#{helper_name}.rb" or create_file "test/#{helper_name}.rb"
+
+      prepend_to_file "test/#{helper_name}.rb" do
+        "require \"minitest/autorun\"\n"
+      end
+      append_to_file "test/#{helper_name}.rb" do
+        "require \"#{file}\"\n"
+      end
+    end
+
     def open_test_class(class_names, file)
       case options[:test_framework]
       when "minitest", "mini_test"
-        append(0, "require 'minitest_helper'\n\n")
-        append_to_file "test/minitest_helper.rb" do
-          "require \"#{file}\"\n"
-        end
+        boiler_plate_test_classes("minitest_helper", file)
       else
-        append(0, "require 'test_helper'\n\n")
-        append_to_file "test/test_helper.rb" do
-          "require \"#{file}\"\n"
-        end
+        boiler_plate_test_classes("test_helper", file)
       end
+
       append(0, "describe #{ class_string(class_names) } do\n")
     end
 
