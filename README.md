@@ -152,3 +152,7 @@ more examples
 7. [rungs](https://github.com/rthbound/rungs)
 
 #### PayDirt is a Ruby gem based on the "use case" pattern set forth in [opencurriculum-flashcards](https://github.com/isotope11/opencurriculum-flashcards)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rthbound/pay_dirt/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
