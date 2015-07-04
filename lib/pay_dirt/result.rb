@@ -1,4 +1,5 @@
 module PayDirt
+  # Provides developers with a [re]usable result object for their service objects to return.
   class Result
     # The response from a use case execution
     #
