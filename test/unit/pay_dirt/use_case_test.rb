@@ -5,7 +5,7 @@ describe PayDirt::UseCase do
   before do
 
     module UseCase
-      class UltimateQuestion
+      class UltimateQuestionInclude
         include PayDirt::UseCase
 
         def initialize(options)
@@ -35,7 +35,7 @@ describe PayDirt::UseCase do
       end
     end
 
-    @use_case = UseCase::UltimateQuestion
+    @use_case = UseCase::UltimateQuestionInclude
   end
 
   it "need not inherit from PayDirt::Base" do

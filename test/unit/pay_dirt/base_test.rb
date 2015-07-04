@@ -4,7 +4,7 @@ require_relative "../../../lib/pay_dirt/base"
 describe PayDirt::Base do
   before do
     module UseCase
-      class UltimateQuestion < PayDirt::Base
+      class UltimateQuestionBase < PayDirt::Base
         def initialize(options)
           options = {
             the_question: "What is the secret to life, the universe, and everything?"
@@ -20,11 +20,11 @@ describe PayDirt::Base do
       end
     end
 
-    @use_case = UseCase::UltimateQuestion
+    @use_case = UseCase::UltimateQuestionBase
   end
 
   it "must inherit from PayDirt::Base" do
-    lineage = UseCase::UltimateQuestion.ancestors.map(&:to_s)
+    lineage = UseCase::UltimateQuestionBase.ancestors.map(&:to_s)
     assert lineage.include?("PayDirt::Base")
   end
 
