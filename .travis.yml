@@ -1,5 +1,10 @@
 language: ruby
 
+matrix:
+  allow_failures:
+    - rvm: ree
+
+
 rvm:
   - 2.2.1
   - 2.1.4
@@ -9,6 +14,5 @@ rvm:
   - jruby-head
   - ruby-head
   - rbx
-  - ree
 
-script: bundle exec rake test; bundle exec rake test # run twice to test generated tests :)
+script: bundle exec rake test; bundle exec rake test # run twice to test generated classest & tests
