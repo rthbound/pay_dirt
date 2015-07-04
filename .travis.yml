@@ -6,9 +6,9 @@ rvm:
   - 2.0.0
   - 1.9.3
   - 1.9.2
-  - rbx-head
   - jruby-head
   - ruby-head
+  - rbx
   - ree
 
 script: bundle exec rake test; bundle exec rake test # run twice to test generated tests :)
