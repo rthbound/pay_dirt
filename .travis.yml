@@ -15,4 +15,4 @@ rvm:
   - ruby-head
   - rbx
 
-script: bundle exec rake test; bundle exec rake test # run twice to test generated classest & tests
+script: bundle exec rake test; bundle exec rake test # run twice to test the generator (thor scripts) via generated classes & tests
