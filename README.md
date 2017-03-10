@@ -53,16 +53,18 @@ After installing, you can use your new generator *anywhere* you can use thor. It
 ```
 $ thor help pay_dirt:service_object:new
 Usage:
-  thor pay_dirt:service_object:new FILE -d, --dependencies=one two three
+  thor pay_dirt:service_object:new FILE
 
 Options:
-  -d, --dependencies=one two three  # specify required dependencies
-  -D, [--defaults=key:value]        # specify default dependencies
-  -i, [--inherit]                   # inherit from PayDirt::Base class
-                                    # Default: true
-  -m, [--include]                   # include the PayDirt::UseCase module (overrides --inherit)
+  -d, [--dependencies=one two three]     # specify required dependencies
+      [--test-framework=TEST_FRAMEWORK]  # choose a testing framework
+  -D, [--defaults=key:value]             # Specify default dependencies
+  -V, [--validations=VALIDATIONS]        # Add validations
+  -i, [--inherit], [--no-inherit]        # inherit from PayDirt::Base class
+                                         # Default: true
+  -m, [--include], [--no-include]        # include the PayDirt::UseCase module (overrides --inherit)
 
-create a service object
+create a fully tested object (optionally, requires dependencies)
 ```
 
 example
@@ -140,6 +142,25 @@ Quick::DigitCheck.new(nose: true).call
 ```
 As you can see, we can now call `Quick::DigitCheck.new(nose: true).call`
 and expect a successful return object. Where you take it from there is up to you.
+
+### Validations
+
+Version 1.1.0 adds validations, and does so in a backward compatible way. This was accomplished by
+modifying the `#load_options` to yield a block if given, otherwise it will return the options hash
+as normal. The following shows how to validate service objects using the example from class earlier
+in this README.
+
+    def initialize(options = {})
+      options = {
+        fingers: 10,
+        toes: 10,
+      }.merge(options)
+
+      load_options(:fingers, :toes, :nose, options) do
+        raise "Oh noes!" unless @fingers == @toes
+        raise "No nose?" if !!@nose
+      end
+    end
 
 more examples
 -------------
