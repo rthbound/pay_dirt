@@ -4,16 +4,21 @@ module PayDirt
 
     desc "new FILE", "create a fully tested object (optionally, requires dependencies)"
     method_option :dependencies,
-      type: :array,
-      aliases: "-d",
-      desc:    "specify required dependencies"
+      type:         :array,
+      aliases:      "-d",
+      desc:         "specify required dependencies"
     method_option :test_framework,
-      type: :string,
-      desc:    "choose a testing framework"
+      type:         :string,
+      desc:         "choose a testing framework"
     method_option :defaults,
-      type: :hash,
-      aliases: "-D",
-      desc: "Specify default dependencies"
+      type:         :hash,
+      aliases:      "-D",
+      desc:         "Specify default dependencies"
+    method_option :validations,
+      type:         :boolean,
+      aliases:      "-V",
+      lazy_default: true,
+      desc:         "Add validations"
     method_option :inherit,
       type:         :boolean,
       desc:         "inherit from PayDirt::Base class",
@@ -77,7 +82,15 @@ module PayDirt
       append(@inner_depth.next, "# will fail if any keys given before options aren't in options\n")
       append(@inner_depth.next, "load_options(")
       @dependencies.each { |dep| append(0, ":#{dep}, ") }
-      append(0, "options)\n")
+      append(0, "options)")
+
+      if options[:validations]
+        append(0, " do\n")
+        append(@inner_depth.next, "end\n")
+      else
+        append(0,"\n")
+      end
+
     end
 
     def set_defaults

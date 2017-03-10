@@ -5,6 +5,7 @@ module PayDirt
     # Load instance variables from the provided hash of dependencies.
     #
     # Raises if any required dependencies (+required_options+) are missing from +options+ hash.
+    # Optionally, takes and yields a block after loading options. Use this to validate dependencies.
     #
     # @param [List<String,Symbol>]
     #   option_names list of keys representing required dependencies
@@ -19,6 +20,8 @@ module PayDirt
 
       # Load remaining options
       options.each_key  { |k| options = load_option(k, options) }
+
+      block_given? ? yield : options
     end
 
     # Returns a result object conveying success or failure (+success+)
