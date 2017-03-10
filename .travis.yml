@@ -1,18 +1,12 @@
 language: ruby
 
-matrix:
-  allow_failures:
-    - rvm: ree
-
-
 rvm:
-  - 2.2.1
-  - 2.1.4
+  - 2.4.0
+  - 2.3.3
+  - 2.2.6
+  - 2.1.10
   - 2.0.0
-  - 1.9.3
-  - 1.9.2
   - jruby
   - ruby-head
-  - rbx
 
 script: bundle exec rake test; bundle exec rake test # run twice to test the generator (thor scripts) via generated classes & tests
